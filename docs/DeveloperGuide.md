@@ -287,14 +287,13 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​ | I can…​                              | So that...​                                          |
+|----------|---------|--------------------------------------|------------------------------------------------------|
+| `* * *`  | parent  | view a tutor profile                 | I can decide whether the tutor is good for my child  |
+| `* * *`  | parent  | delete a tutor from the address book | the address book stays relevant and uncluttered      |
+| `* * *`  | parent  | add a tutor profile                  | I can keep track of tutors                           |
+| `* * *`  | parent  | view a tutor's hourly rate           | I can find someone who fits within my family's budget |
+| `* * `   | parent  | search for tutors by subject         | I can match a tutor to my child's academic needs     |
 
 *{More to be added}*
 ### Use cases

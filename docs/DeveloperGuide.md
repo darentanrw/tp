@@ -463,11 +463,16 @@ Guarantees: If MSS completes until step 4, the Tutor Contact will be updated in 
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. The system should work on mainstream operating systems　such as Windows, Linux, macOS as long as Java `17` or above installed.
+2. The system should be able to load and display up to 1000 Tutor Profiles within 5 seconds of application start up.
+3. A user with above average typing speed should be able to perform common tasks (such as adding or editing tutor profiles) faster using commands and flags than using the mouse.
+4. The system should respond to user commands within 1 second for typical usage, excluding file loading and saving operations.
+5. The system should handle invalid Flags, Indices, or Parameters gracefully by displaying a clear error message instead of crashing.
+6. The text file containing tutor profile data should be transferable and human-readable for portability across different machines.
+7. The application should be usable without an internet connection.
+8. The application should not require an installer and should run from a single directory without external dependencies beyond Java `17`.
+9. The application should be packaged into a single JAR file to simplify distribution and testing.
 
-*{More to be added}*
 
 ### Glossary
 

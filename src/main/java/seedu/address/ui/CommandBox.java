@@ -3,14 +3,11 @@ package seedu.address.ui;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -26,7 +23,6 @@ public class CommandBox extends UiPart<Region> {
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
     private Timeline resizeTimeline;
-    private boolean isScrollable = false;
 
     private final CommandExecutor commandExecutor;
 
@@ -39,104 +35,73 @@ public class CommandBox extends UiPart<Region> {
     public CommandBox(CommandExecutor commandExecutor) {
         super(FXML);
         this.commandExecutor = commandExecutor;
-        // calls #setStyleToDefault() whenever there is a change to the text of the command box.
         commandTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             setStyleToDefault();
-            int oldLength = (oldValue == null) ? 0 : oldValue.length();
-            int newLength = (newValue == null) ? 0 : newValue.length();
-            boolean isLargeChange = Math.abs(newLength - oldLength) > 1;
-            handleHeightChange(!isLargeChange);
-        });
-
-        // Prevent scrolling when content fits
-        commandTextField.addEventFilter(ScrollEvent.SCROLL, event -> {
-            if (!isScrollable) {
-                event.consume();
+            int oldLength;
+            if (oldValue == null) {
+                oldLength = 0;
+            } else {
+                oldLength = oldValue.length();
             }
+
+            int newLength;
+            if (newValue == null) {
+                newLength = 0;
+            } else {
+                newLength = newValue.length();
+            }
+            boolean isPaste = (newLength - oldLength) > 1;
+            handleHeightChange(isPaste);
         });
 
-        // Add listener for Enter key
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 if (!event.isShiftDown()) {
-                    event.consume(); // Prevent new line being added
+                    event.consume();
                     handleCommandEntered();
                 }
-                // else allow new line (default behavior)
             }
         });
 
-        // Also update height when width changes (e.g. window resize)
         commandTextField.widthProperty().addListener((observable, oldValue, newValue) -> handleHeightChange(false));
     }
 
     /**
      * Adjusts the height of the command box based on its content.
-     * @param shouldAnimate Whether to animate the height change.
+     * @param isPaste Whether the change is caused by pasting text.
      */
-    private void handleHeightChange(boolean shouldAnimate) {
-        Text text = new Text(commandTextField.getText());
-        text.setFont(commandTextField.getFont());
-
-        // Approximate width: subtract horizontal padding/margins
+    private void handleHeightChange(boolean isPaste) {
         double width = commandTextField.getWidth();
         if (width <= 0) {
             return;
         }
 
-        // Assuming specific padding and borders from CSS (12px vertical, 16px horizontal, 1.5px border)
-        // We subtract a significantly larger buffer to ensure the helper Text wraps BEFORE the TextArea does
-        text.setWrappingWidth(width - 60);
+        Text text = new Text(commandTextField.getText());
+        text.setFont(commandTextField.getFont());
+        text.setWrappingWidth(width - 60); // Buffer for padding and scrollbar
 
         double height = text.getLayoutBounds().getHeight();
+        double newHeight = height + 30; // Buffer for vertical padding
 
-        // Add vertical padding (top + bottom) + borders + buffer
-        double newHeight = height + 40;
-
-        // Enforce constraints (min 50, max 400)
         if (newHeight < 50) {
             newHeight = 50;
         }
 
-        double maxHeight = 200; // aligned with FXML
-        boolean wasScrollable = isScrollable;
-        isScrollable = newHeight > maxHeight;
-        boolean transitionedToScrollable = !wasScrollable && isScrollable;
+        double maxHeight = 200;
         double targetHeight = Math.min(newHeight, maxHeight);
 
-        // Manage scrollbar visibility: show only if content exceeds max height
-        ScrollPane scrollPane = (ScrollPane) commandTextField.lookup(".scroll-pane");
-        if (scrollPane != null) {
-            if (newHeight > maxHeight) {
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-            } else {
-                scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-            }
-        }
-
-        if (commandTextField.getPrefHeight() != targetHeight || transitionedToScrollable) {
+        if (commandTextField.getPrefHeight() != targetHeight) {
             if (resizeTimeline != null) {
                 resizeTimeline.stop();
             }
 
-            if (shouldAnimate) {
-                resizeTimeline = new Timeline(new KeyFrame(Duration.millis(150),
-                        new KeyValue(commandTextField.prefHeightProperty(), targetHeight)));
+            resizeTimeline = new Timeline(new KeyFrame(Duration.millis(50),
+                    new KeyValue(commandTextField.prefHeightProperty(), targetHeight)));
+            resizeTimeline.play();
+        }
 
-                // If we are fully expanded (fitting all text), reset scroll to top to ensure first row is visible
-                if (newHeight <= maxHeight || transitionedToScrollable) {
-                    resizeTimeline.setOnFinished(event -> commandTextField.setScrollTop(0));
-                }
-
-                resizeTimeline.play();
-            } else {
-                commandTextField.setPrefHeight(targetHeight);
-                if (newHeight <= maxHeight) {
-                    commandTextField.setScrollTop(0);
-                } else if (transitionedToScrollable) {
-                    Platform.runLater(() -> commandTextField.setScrollTop(0));
-                }
-            }
+        if (isPaste && newHeight > maxHeight) {
+            commandTextField.setScrollTop(0);
         }
     }
 

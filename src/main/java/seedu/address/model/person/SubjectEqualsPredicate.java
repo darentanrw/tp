@@ -2,6 +2,8 @@ package seedu.address.model.person;
 
 import java.util.function.Predicate;
 
+import seedu.address.commons.util.StringUtil;
+
 /**
  * Tests whether a {@code Person}'s subject matches the specified subject.
  */
@@ -14,8 +16,7 @@ public class SubjectEqualsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return person.getSubjects().stream()
-                .anyMatch(Subject -> Subject.isSameSubject(subject));
+        return StringUtil.containsWordPrefixIgnoreCase(person.getSubject().toString(), subject.subject);
     }
 
     @Override
@@ -27,6 +28,6 @@ public class SubjectEqualsPredicate implements Predicate<Person> {
             return false;
         }
         SubjectEqualsPredicate otherPredicate = (SubjectEqualsPredicate) other;
-        return subject.isSameSubject(otherPredicate.subject);
+        return subject.subject.equalsIgnoreCase(otherPredicate.subject.subject);
     }
 }

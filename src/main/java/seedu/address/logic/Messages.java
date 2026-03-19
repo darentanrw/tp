@@ -44,7 +44,7 @@ public class Messages {
                 .append("; Address: ")
                 .append(person.getAddress())
                 .append("; Subject: ")
-                .append(person.getSubject())
+                .append(person.getSubjects())
                 .append("; Rate: ")
                 .append(person.getRate())
                 .append("; Tags: ");

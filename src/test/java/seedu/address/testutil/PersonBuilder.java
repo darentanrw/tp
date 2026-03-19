@@ -29,7 +29,7 @@ public class PersonBuilder {
     private Phone phone;
     private Email email;
     private Address address;
-    private Subject subject;
+    private Set<Subject> subjects;
     private Rate rate;
     private Set<Tag> tags;
 
@@ -41,7 +41,8 @@ public class PersonBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
-        subject = new Subject(DEFAULT_SUBJECT);
+        subjects = new HashSet<>();
+        subjects.add(new Subject(DEFAULT_SUBJECT));
         rate = new Rate(DEFAULT_RATE);
         tags = new HashSet<>();
     }
@@ -54,7 +55,7 @@ public class PersonBuilder {
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
-        subject = personToCopy.getSubject();
+        subjects = new HashSet<>(personToCopy.getSubjects());
         rate = personToCopy.getRate();
         tags = new HashSet<>(personToCopy.getTags());
     }
@@ -103,7 +104,7 @@ public class PersonBuilder {
      * Sets the {@code Subject} of the {@code Person} that we are building.
      */
     public PersonBuilder withSubject(String subject) {
-        this.subject = new Subject(subject);
+        this.subjects = SampleDataUtil.getSubjectSet(subject);
         return this;
     }
 
@@ -116,7 +117,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, subject, rate, tags);
+        return new Person(name, phone, email, address, subjects, rate, tags);
     }
 
 }

@@ -13,6 +13,7 @@ import java.util.Set;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Subject;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -35,8 +36,11 @@ public class PersonUtil {
         sb.append(PREFIX_NAME + person.getName().fullName + " ");
         sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
-        sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
-        sb.append(PREFIX_SUBJECT + person.getSubject().subject + " ");
+        if (!person.getAddress().value.isEmpty()) {
+            sb.append(PREFIX_ADDRESS).append(person.getAddress().value).append(" ");
+        }
+        person.getSubjects().stream().forEach(s -> sb.append(PREFIX_SUBJECT
+                + s.subject + " "));
         sb.append(PREFIX_RATE + person.getRate().rate + " ");
         person.getTags().stream().forEach(
                 s -> sb.append(PREFIX_TAG + s.tagName + " "));
@@ -52,8 +56,19 @@ public class PersonUtil {
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
-        descriptor.getSubject().ifPresent(subject -> sb.append(PREFIX_SUBJECT).append(subject.subject).append(" "));
+        descriptor.getAddress().ifPresent(address -> {
+            if (!address.value.isEmpty()) {
+                sb.append(PREFIX_ADDRESS).append(address.value).append(" ");
+            }
+        });
+        if (descriptor.getSubject().isPresent()) {
+            Set<Subject> subjects = descriptor.getSubject().get();
+            if (subjects.isEmpty()) {
+                sb.append(PREFIX_SUBJECT);
+            } else {
+                subjects.forEach(s -> sb.append(PREFIX_SUBJECT).append(s.subject).append(" "));
+            }
+        }
         descriptor.getRate().ifPresent(rate -> sb.append(PREFIX_RATE).append(rate.rate).append(" "));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();

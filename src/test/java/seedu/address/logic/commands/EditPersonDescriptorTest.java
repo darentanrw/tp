@@ -55,7 +55,7 @@ public class EditPersonDescriptorTest {
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different subject -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withSubject(VALID_SUBJECT_BOB).build();
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withSubjects(VALID_SUBJECT_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
         // different rate -> returns false

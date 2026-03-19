@@ -105,7 +105,7 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Subject updatedSubject = editPersonDescriptor.getSubject().orElse(personToEdit.getSubject());
+        Set<Subject> updatedSubject = editPersonDescriptor.getSubject().orElse(personToEdit.getSubjects());
         Rate updatedRate = editPersonDescriptor.getRate().orElse(personToEdit.getRate());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
@@ -147,7 +147,7 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private Address address;
-        private Subject subject;
+        private Set<Subject> subjects;
         private Rate rate;
         private Set<Tag> tags;
 
@@ -163,7 +163,7 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
-            setSubject(toCopy.subject);
+            setSubject(toCopy.subjects);
             setRate(toCopy.rate);
             setTags(toCopy.tags);
         }
@@ -172,7 +172,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, subject, rate, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, subjects, rate, tags);
         }
 
         public void setName(Name name) {
@@ -207,12 +207,12 @@ public class EditCommand extends Command {
             return Optional.ofNullable(address);
         }
 
-        public void setSubject(Subject subject) {
-            this.subject = subject;
+        public void setSubject(Set<Subject> subjects) {
+            this.subjects = (subjects != null) ? new HashSet<>(subjects) : null;
         }
 
-        public Optional<Subject> getSubject() {
-            return Optional.ofNullable(subject);
+        public Optional<Set<Subject>> getSubject() {
+            return (subjects != null) ? Optional.of(Collections.unmodifiableSet(subjects)) : Optional.empty();
         }
 
         public void setRate(Rate rate) {
@@ -257,7 +257,7 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
-                    && Objects.equals(subject, otherEditPersonDescriptor.subject)
+                    && Objects.equals(subjects, otherEditPersonDescriptor.subjects)
                     && Objects.equals(rate, otherEditPersonDescriptor.rate)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
@@ -269,7 +269,7 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("address", address)
-                    .add("subject", subject)
+                    .add("subject", subjects)
                     .add("rate", rate)
                     .add("tags", tags)
                     .toString();

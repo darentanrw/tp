@@ -1,6 +1,7 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -62,7 +63,11 @@ public class PersonCard extends UiPart<Region> {
             address.setText("Address: Not Provided");
         }
 
-        subject.setText("Subject: " + person.getSubject().subject);
+        String subjectText = person.getSubjects().stream()
+                        .map(Subject -> Subject.subject)
+                        .sorted()
+                        .collect(Collectors.joining(", "));
+        subject.setText("Subject: " + subjectText);
         rate.setText("Hourly Payment Rate: " + person.getRate().rate);
         email.setText("Email Address: " + person.getEmail().value);
         person.getTags().stream()

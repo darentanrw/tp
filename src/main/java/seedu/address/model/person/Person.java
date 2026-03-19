@@ -23,7 +23,7 @@ public class Person {
 
     // Data fields
     private final Address address;
-    private final Subject subject;
+    private final Set<Subject> subjects = new HashSet<>();
     private final Rate rate;
     private final Set<Tag> tags = new HashSet<>();
 
@@ -31,13 +31,14 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Subject subject, Rate rate, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Subject> subject, Rate rate,
+                  Set<Tag> tags) {
         requireAllNonNull(name, phone, email, subject, rate, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.subject = subject;
+        this.subjects.addAll(subject);
         this.rate = rate;
         this.tags.addAll(tags);
     }
@@ -54,8 +55,8 @@ public class Person {
         return email;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public Set<Subject> getSubjects() {
+        return Collections.unmodifiableSet(subjects);
     }
 
     public Rate getRate() {
@@ -106,7 +107,7 @@ public class Person {
         return name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
-                && subject.equals(otherPerson.subject)
+                && subjects.equals(otherPerson.subjects)
                 && rate.equals(otherPerson.rate)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags);
@@ -115,7 +116,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, subject, rate, tags);
+        return Objects.hash(name, phone, email, address, subjects, rate, tags);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
-                .add("subject", subject)
+                .add("subject", subjects)
                 .add("rate", rate)
                 .add("tags", tags)
                 .toString();

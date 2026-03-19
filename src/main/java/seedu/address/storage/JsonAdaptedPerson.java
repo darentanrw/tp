@@ -30,7 +30,7 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
-    private final String subject;
+    private final List<JsonAdaptedSubject> subjects = new ArrayList<>();
     private final String rate;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -40,13 +40,15 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("subject") String subject, @JsonProperty("rate") String rate,
+            @JsonProperty("subject") List<JsonAdaptedSubject>subjects, @JsonProperty("rate") String rate,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.subject = subject;
+        if (subjects != null) {
+            this.subjects.addAll(subjects);
+        }
         this.rate = rate;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -61,7 +63,9 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
-        subject = source.getSubject().subject;
+        subjects.addAll(source.getSubjects().stream()
+                .map(JsonAdaptedSubject::new)
+                .collect(Collectors.toList()));
         rate = source.getRate().rate;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -113,13 +117,10 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
-        if (subject == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Subject.class.getSimpleName()));
+        final Set<Subject> modelSubjects = new HashSet<>();
+        for (JsonAdaptedSubject subject : subjects) {
+            modelSubjects.add(subject.toModelType());
         }
-        if (!Subject.isValidSubject(subject)) {
-            throw new IllegalValueException(Subject.MESSAGE_CONSTRAINTS);
-        }
-        final Subject modelSubject = new Subject(subject);
 
         if (rate == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Rate.class.getSimpleName()));
@@ -130,7 +131,7 @@ class JsonAdaptedPerson {
         final Rate modelRate = new Rate(rate);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelSubject, modelRate, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelSubjects, modelRate, modelTags);
     }
 
 }

@@ -14,7 +14,8 @@ public class SubjectEqualsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
-        return person.getSubject().isSameSubject(subject);
+        return person.getSubjects().stream()
+                .anyMatch(Subject -> Subject.isSameSubject(subject));
     }
 
     @Override

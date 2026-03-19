@@ -40,7 +40,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setAddress(person.getAddress());
         descriptor.setTags(person.getTags());
-        descriptor.setSubject(person.getSubject());
+        descriptor.setSubject(person.getSubjects());
         descriptor.setRate(person.getRate());
     }
 
@@ -95,8 +95,9 @@ public class EditPersonDescriptorBuilder {
      * Sets the {@code Subject} of the {@code EditPersonDescriptor} that we are
      * building.
      */
-    public EditPersonDescriptorBuilder withSubject(String subject) {
-        descriptor.setSubject(new Subject(subject));
+    public EditPersonDescriptorBuilder withSubjects(String... subjects) {
+        Set<Subject> subjectSet = Stream.of(subjects).map(Subject::new).collect(Collectors.toSet());
+        descriptor.setSubject(subjectSet);
         return this;
     }
 

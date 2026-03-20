@@ -10,12 +10,12 @@ pageNav: 3
 
 > **Who is this guide for?**
 > This guide is written for parents who are comfortable using a keyboard and want to manage tutor contacts efficiently. No prior technical experience is required — if you can open a terminal and type commands, you are ready to use Tuto.
- 
+
 ---
 
 <!-- * Table of Contents -->
 <page-nav-print />
- 
+
 ---
 
 ## Quick Start
@@ -34,7 +34,7 @@ To verify your Java version, open a terminal and run:
 java -version
 ```
 You should see `17` or higher in the output.
- 
+
 ---
 
 ### Step 2 — Download Tuto
@@ -42,7 +42,7 @@ You should see `17` or higher in the output.
 Download the latest `tuto.jar` file from the [Tuto releases page](https://github.com/AY2526S2-CS2103T-T15-3/tp/releases).
 
 Move the file into a dedicated folder (e.g., `~/tuto/`). This folder will store your data going forward.
- 
+
 ---
 
 ### Step 3 — Launch Tuto
@@ -60,7 +60,7 @@ Move the file into a dedicated folder (e.g., `~/tuto/`). This folder will store 
 A window similar to the one below should appear within a few seconds, pre-loaded with sample tutor data.
 
 ![Tuto UI on first launch](images/Ui.png)
- 
+
 ---
 
 ### Step 4 — Try Your First Commands
@@ -77,7 +77,7 @@ Type a command into the **Command Box** at the top and press **Enter** to run it
 | Exit the app | `exit` |
 
 > **Tip:** The [Command Summary](#command-summary) at the bottom of this guide is a handy reference once you are familiar with the commands.
- 
+
 ---
 
 ## Understanding the Interface
@@ -89,7 +89,7 @@ Tuto's interface has three main areas:
 - **Tutor List Panel** — displays all tutor profiles matching the current view
 
 Each tutor card in the panel shows the tutor's name, phone number, email, subject, and hourly rate. Tags (if any) appear as labels on the card.
- 
+
 ---
 
 ## Features
@@ -109,7 +109,7 @@ The following conventions apply to all commands in this guide:
 > **Note for PDF users:** If you copy commands from a PDF, line breaks may introduce unexpected spaces. Re-type the command if it does not execute as expected.
 
 </box>
- 
+
 ---
 
 ### Viewing Help : `help`
@@ -121,7 +121,7 @@ Opens a link to this User Guide.
 **Expected output:** A pop-up window appears with a link to the online User Guide.
 
 ![Help window](images/helpMessage.png)
- 
+
 ---
 
 ### Adding a Tutor : `add`
@@ -170,7 +170,7 @@ Adds Betsy Crowe as a Biology tutor with an address and two tags.
 ```
 New person added: John Doe; Phone: 98765432; Email: johnd@example.com; Address: ; Subject: Chemistry; Rate: 50; Tags:
 ```
- 
+
 ---
 
 ### Listing All Tutors : `list`
@@ -182,7 +182,7 @@ Displays all tutor profiles stored in Tuto.
 **Expected output:** The Tutor List Panel refreshes to show all contacts. The Result Display shows the number of tutors listed.
 
 > **Tip:** Use `list` to reset the view after a `find` command has filtered your results.
- 
+
 ---
 
 ### Editing a Tutor Profile : `edit`
@@ -224,7 +224,7 @@ Changes the 1st tutor's subject to Physics and rate to $30/hr.
 ```
 Edited Person: John Doe; Phone: 91234567; Email: johndoe@example.com; Address: ; Subject: Chemistry; Rate: 50; Tags:
 ```
- 
+
 ---
 
 ### Finding Tutors : `find`
@@ -278,7 +278,7 @@ Returns tutors named Alex or David.
 ```
 2 persons listed!
 ```
- 
+
 ---
 
 ### Deleting a Tutor : `delete`
@@ -312,7 +312,7 @@ Deletes the 1st tutor returned in the Biology search results.
 ```
 Deleted Person: Betsy Crowe; Phone: 1234567; ...
 ```
- 
+
 ---
 
 ### Clearing All Tutors : `clear`
@@ -331,7 +331,7 @@ Removes **all** tutor profiles from Tuto.
 ```
 Address book has been cleared!
 ```
- 
+
 ---
 
 ### Exiting Tuto : `exit`
@@ -341,7 +341,7 @@ Closes the application.
 **Format:** `exit`
 
 Your data is saved automatically — there is no need to save before exiting.
- 
+
 ---
 
 ### Saving Your Data
@@ -353,7 +353,7 @@ Tuto saves all tutor data automatically to a JSON file after every command that 
 ```
 
 No manual saving is needed.
- 
+
 ---
 
 ### Editing the Data File Directly
@@ -365,13 +365,13 @@ Advanced users may edit the data file manually using any text editor.
 **Caution:** If the file is saved in an invalid format, Tuto will discard all data and start fresh on the next launch. **Back up the file before making any edits.** Additionally, values outside accepted ranges may cause Tuto to behave unexpectedly.
 
 </box>
- 
+
 ---
 
 ### Archiving Data `[coming in v2.0]`
 
 _Details coming soon._
- 
+
 ---
 
 ## FAQ
@@ -379,19 +379,19 @@ _Details coming soon._
 **Q: How do I move my tutor data to a new computer?**
 
 A: Install Tuto on the new computer and run it once to generate the default data folder. Then copy the `addressbook.json` file from your old computer into the `data/` folder on the new one, replacing the empty file.
- 
+
 ---
 
 **Q: Tuto opened off-screen after I disconnected an external monitor. What do I do?**
 
 A: Delete the `preferences.json` file in the same folder as `tuto.jar`, then relaunch the app. This resets the window position.
- 
+
 ---
 
 **Q: I ran `help` again but the Help Window did not appear. Why?**
 
 A: The Help Window may be minimised. Check your taskbar and restore it manually.
- 
+
 ---
 
 ## Known Issues

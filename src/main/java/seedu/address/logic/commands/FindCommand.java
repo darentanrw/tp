@@ -48,21 +48,40 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         ObservableList<Person> allPersons = model.getAddressBook().getPersonList();
-        List<Person> foundPersons = allPersons.stream()
+        
+        List<Person> foundPersons = getFoundPersons(allPersons);
+        List<PersonIndexPair> foundPersonIndices = getPersonIndices(foundPersons, allPersons);
+        String resultMessage = buildResultMessage(foundPersonIndices);
+
+        return new CommandResult(resultMessage, foundPersonIndices);
+    }
+
+    private List<Person> getFoundPersons(ObservableList<Person> allPersons) {
+        return allPersons.stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
+    }
 
-        List<PersonIndexPair> foundPersonIndices = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, foundPersons.size()));
-
-        for (Person p : foundPersons) {
-            int index = allPersons.indexOf(p) + 1;
-            sb.append("\n").append(index).append(". ").append(Messages.format(p));
-            foundPersonIndices.add(new PersonIndexPair(p, index));
+    private List<PersonIndexPair> getPersonIndices(List<Person> foundPersons, ObservableList<Person> allPersons) {
+        List<PersonIndexPair> pairs = new ArrayList<>();
+        for (Person person : foundPersons) {
+            int index = allPersons.indexOf(person) + 1;
+            pairs.add(new PersonIndexPair(person, index));
         }
+        return pairs;
+    }
 
-        return new CommandResult(sb.toString(), foundPersonIndices);
+    private String buildResultMessage(List<PersonIndexPair> pairs) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, pairs.size()));
+
+        for (PersonIndexPair pair : pairs) {
+            sb.append("\n")
+                    .append(pair.index)
+                    .append(". ")
+                    .append(Messages.format(pair.person));
+        }
+        return sb.toString();
     }
 
     @Override

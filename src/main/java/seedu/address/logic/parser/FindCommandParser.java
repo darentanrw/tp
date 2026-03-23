@@ -35,9 +35,8 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         Predicate<Person> combinedPredicate = person -> true;
 
-        if (!argMultimap.getPreamble().isEmpty()) {
-            String[] keywords = argMultimap.getPreamble().split("\\s+");
-            combinedPredicate = combinedPredicate.and(new UniversalSearchPredicate(Arrays.asList(keywords)));
+        if (hasPreamble(argMultimap)) {
+            combinedPredicate = combinedPredicate.and(parseUniversalSearchPredicate(argMultimap));
         }
 
         if (hasName(argMultimap)) {
@@ -70,10 +69,15 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     private boolean isValidFindInput(ArgumentMultimap argMultimap) {
-        return !argMultimap.getPreamble().isEmpty()
+        return hasPreamble(argMultimap)
                 || hasName(argMultimap)
                 || hasRate(argMultimap)
                 || hasSubject(argMultimap);
+    }
+
+    private Predicate<Person> parseUniversalSearchPredicate(ArgumentMultimap argMultimap) {
+        String[] keywords = argMultimap.getPreamble().split("\\s+");
+        return new UniversalSearchPredicate(Arrays.asList(keywords));
     }
 
     private Predicate<Person> parseNamePredicate(ArgumentMultimap argMultimap) throws ParseException {
@@ -134,6 +138,10 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     private boolean hasName(ArgumentMultimap argMultimap) {
         return argMultimap.getValue(PREFIX_NAME).isPresent();
+    }
+
+    private boolean hasPreamble(ArgumentMultimap argMultimap) {
+        return !argMultimap.getPreamble().isEmpty();
     }
 
     private boolean hasRate(ArgumentMultimap argMultimap) {

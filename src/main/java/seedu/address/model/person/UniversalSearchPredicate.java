@@ -20,15 +20,27 @@ public class UniversalSearchPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return keywords.stream()
-                .anyMatch(keyword ->
-                        StringUtil.containsWordPrefixIgnoreCase(person.getName().fullName, keyword)
-                                || StringUtil.containsWordPrefixIgnoreCase(person.getPhone().value, keyword)
-                                || StringUtil.containsWordPrefixIgnoreCase(person.getEmail().value, keyword)
-                                || StringUtil.containsWordPrefixIgnoreCase(person.getAddress().value, keyword)
-                                || person.getSubjects().stream().anyMatch(subject -> StringUtil.containsWordPrefixIgnoreCase(subject.subject, keyword))
-                                || StringUtil.containsWordPrefixIgnoreCase(person.getRate().rate, keyword)
-                                || person.getTags().stream().anyMatch(tag -> StringUtil.containsWordPrefixIgnoreCase(tag.tagName, keyword))
-                );
+                .anyMatch(keyword -> isPersonMatchingKeyword(person, keyword));
+    }
+
+    private boolean isPersonMatchingKeyword(Person person, String keyword) {
+        return StringUtil.containsWordPrefixIgnoreCase(person.getName().fullName, keyword)
+                || StringUtil.containsWordPrefixIgnoreCase(person.getPhone().value, keyword)
+                || StringUtil.containsWordPrefixIgnoreCase(person.getEmail().value, keyword)
+                || StringUtil.containsWordPrefixIgnoreCase(person.getAddress().value, keyword)
+                || isSubjectMatching(person, keyword)
+                || StringUtil.containsWordPrefixIgnoreCase(person.getRate().rate, keyword)
+                || isTagMatching(person, keyword);
+    }
+
+    private boolean isSubjectMatching(Person person, String keyword) {
+        return person.getSubjects().stream()
+                .anyMatch(subject -> StringUtil.containsWordPrefixIgnoreCase(subject.subject, keyword));
+    }
+
+    private boolean isTagMatching(Person person, String keyword) {
+        return person.getTags().stream()
+                .anyMatch(tag -> StringUtil.containsWordPrefixIgnoreCase(tag.tagName, keyword));
     }
 
     @Override
@@ -53,4 +65,3 @@ public class UniversalSearchPredicate implements Predicate<Person> {
                 .toString();
     }
 }
-

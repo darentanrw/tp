@@ -5,7 +5,7 @@
 
 # Tuto
 
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
+[![CI Status](https://github.com/AY2526S2-CS2103T-T15-3/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2526S2-CS2103T-T15-3/tp/actions)
 
 ![Ui](images/Ui.png)
 
@@ -15,4 +15,4 @@
 
 **Acknowledgements**
 
-* Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
+- Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)

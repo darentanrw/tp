@@ -4,14 +4,20 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonListSortComparator;
+import seedu.address.model.person.PersonSortField;
+import seedu.address.model.person.PersonSortOrder;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -22,6 +28,9 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
+    private final SortedList<Person> sortedPersons;
+    private PersonSortField sortField;
+    private PersonSortOrder sortOrder;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -34,6 +43,10 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        sortedPersons = new SortedList<>(filteredPersons);
+        sortedPersons.setComparator(null);
+        sortField = null;
+        sortOrder = null;
     }
 
     public ModelManager() {
@@ -131,13 +144,21 @@ public class ModelManager implements Model {
      */
     @Override
     public ObservableList<Person> getFilteredPersonList() {
-        return filteredPersons;
+        return FXCollections.unmodifiableObservableList(sortedPersons);
     }
 
     @Override
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+    }
+
+    @Override
+    public void updateDisplayedPersonListSort(PersonSortField field, PersonSortOrder order) {
+        requireAllNonNull(field, order);
+        this.sortField = field;
+        this.sortOrder = order;
+        sortedPersons.setComparator(PersonListSortComparator.forFieldAndOrder(field, order));
     }
 
     @Override
@@ -154,7 +175,9 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons);
+                && filteredPersons.equals(otherModelManager.filteredPersons)
+                && Objects.equals(sortField, otherModelManager.sortField)
+                && Objects.equals(sortOrder, otherModelManager.sortOrder);
     }
 
 }

@@ -23,6 +23,8 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonSortField;
+import seedu.address.model.person.PersonSortOrder;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -165,6 +167,11 @@ public class AddCommandTest {
 
         @Override
         public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateDisplayedPersonListSort(PersonSortField field, PersonSortOrder order) {
             throw new AssertionError("This method should not be called.");
         }
     }

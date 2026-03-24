@@ -37,11 +37,13 @@ public class AddCommand extends Command {
             + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
             + PREFIX_SUBJECT + "Biology "
             + PREFIX_RATE + "25 "
-            + PREFIX_TAG + "friends "
-            + PREFIX_TAG + "owesMoney";
+            + PREFIX_TAG + "F2F "
+            + PREFIX_TAG + "cafe";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book!";
+    public static final String MESSAGE_DUPLICATE_PHONE = "This phone number already exists!";
+    public static final String MESSAGE_DUPLICATE_EMAIL = "This email already exists!";
 
     private final Person toAdd;
 
@@ -59,6 +61,14 @@ public class AddCommand extends Command {
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        if (model.hasDuplicatePhone(toAdd)) {
+            throw new CommandException(MESSAGE_DUPLICATE_PHONE);
+        }
+
+        if (model.hasDuplicateEmail(toAdd)) {
+            throw new CommandException(MESSAGE_DUPLICATE_EMAIL);
         }
 
         model.addPerson(toAdd);

@@ -34,6 +34,11 @@ public interface Logic {
     ObservableList<Person> getFilteredPersonList();
 
     /**
+     * Returns a short description of how the displayed person list is sorted (for the UI header).
+     */
+    String getDisplayedListSortDescription();
+
+    /**
      * Returns the user prefs' address book file path.
      */
     Path getAddressBookFilePath();

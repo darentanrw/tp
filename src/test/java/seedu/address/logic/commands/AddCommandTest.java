@@ -174,6 +174,11 @@ public class AddCommandTest {
         public void updateDisplayedPersonListSort(PersonSortField field, PersonSortOrder order) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public String getDisplayedListSortDescription() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**

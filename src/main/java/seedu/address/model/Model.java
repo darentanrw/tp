@@ -102,4 +102,9 @@ public interface Model {
      * @throws NullPointerException if {@code field} or {@code order} is null.
      */
     void updateDisplayedPersonListSort(PersonSortField field, PersonSortOrder order);
+
+    /**
+     * Returns a short user-visible description of how the displayed list is currently sorted.
+     */
+    String getDisplayedListSortDescription();
 }

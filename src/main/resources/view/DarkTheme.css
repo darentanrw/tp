@@ -108,6 +108,18 @@
     -fx-text-fill: #1a2530;
 }
 
+/* ── Person list header (above contact list) ── */
+.person-list-header-title {
+    -fx-font-size: 16pt;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a2530;
+}
+
+.person-list-header-subtitle {
+    -fx-font-size: 13pt;
+    -fx-text-fill: derive(#1a2530, 18%);
+}
+
 /* ── Contact list ── */
 .list-view {
     -fx-background-color: transparent;

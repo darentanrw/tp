@@ -53,7 +53,8 @@ public class ModelManager implements Model {
         this(new AddressBook(), new UserPrefs());
     }
 
-    //=========== UserPrefs ==================================================================================
+    // =========== UserPrefs
+    // ==================================================================================
 
     @Override
     public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
@@ -88,7 +89,8 @@ public class ModelManager implements Model {
         userPrefs.setAddressBookFilePath(addressBookFilePath);
     }
 
-    //=========== AddressBook ================================================================================
+    // =========== AddressBook
+    // ================================================================================
 
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
@@ -136,10 +138,12 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
-    //=========== Filtered Person List Accessors =============================================================
+    // =========== Filtered Person List Accessors
+    // =============================================================
 
     /**
-     * Returns an unmodifiable view of the list of {@code Person} backed by the internal list of
+     * Returns an unmodifiable view of the list of {@code Person} backed by the
+     * internal list of
      * {@code versionedAddressBook}
      */
     @Override
@@ -159,6 +163,16 @@ public class ModelManager implements Model {
         this.sortField = field;
         this.sortOrder = order;
         sortedPersons.setComparator(PersonListSortComparator.forFieldAndOrder(field, order));
+    }
+
+    @Override
+    public String getDisplayedListSortDescription() {
+        if (sortField == null) {
+            return "List sorted by order of addition";
+        }
+        String fieldWord = sortField == PersonSortField.NAME ? "name" : "rate";
+        String orderWord = sortOrder == PersonSortOrder.ASCENDING ? "ascending" : "descending";
+        return "List sorted by " + fieldWord + " (" + orderWord + ")";
     }
 
     @Override

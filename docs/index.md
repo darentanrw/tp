@@ -3,19 +3,16 @@
   title: ""
 ---
 
-# AddressBook Level-3
+# Tuto
 
-[![CI Status](https://github.com/se-edu/addressbook-level3/workflows/Java%20CI/badge.svg)](https://github.com/se-edu/addressbook-level3/actions)
-[![codecov](https://codecov.io/gh/se-edu/addressbook-level3/branch/master/graph/badge.svg)](https://codecov.io/gh/se-edu/addressbook-level3)
+[![CI Status](https://github.com/AY2526S2-CS2103T-T15-3/tp/workflows/Java%20CI/badge.svg)](https://github.com/AY2526S2-CS2103T-T15-3/tp/actions)
 
 ![Ui](images/Ui.png)
 
-**AddressBook is a desktop application for managing your contact details.** While it has a GUI, most of the user interactions happen using a CLI (Command Line Interface).
+**Tuto is a desktop application for managing your contact details.** While it has a GUI, most of the user interactions happen using a CLI (Command Line Interface).
 
-* If you are interested in using AddressBook, head over to the [_Quick Start_ section of the **User Guide**](UserGuide.html#quick-start).
-* If you are interested about developing AddressBook, the [**Developer Guide**](DeveloperGuide.html) is a good place to start.
-
+**Tuto** is **optimised for use via a Command Line Interface (CLI)** while still offering the benefits of a Graphical User Interface (GUI). If you can type fast, Tuto lets you manage tutor contacts faster than traditional GUI apps.
 
 **Acknowledgements**
 
-* Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
+- Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)

@@ -131,7 +131,7 @@ The `find` command allows users to filter the displayed person list based on the
 
 The diagram below shows the parser classes involved in handling the `find` command.
 
-<puml src="diagrams/FindParserClassDiagram.puml" width="500"></puml>
+<puml src="diagrams/FindParserClassDiagram.puml" width="500"/>
 
 When the user enters a `find` command, `AddressBookParser` identifies the command word and creates a `FindCommandParser`.  
 `FindCommandParser` then parses the input arguments and constructs a `FindCommand`, which is returned as a `Command` object for execution.

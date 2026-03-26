@@ -128,6 +128,16 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(Rate.MESSAGE_CONSTRAINTS);
         }
 
+        // If it contains ANY non-digit separator but no '-'
+        if (!rateArgs.contains("-") && !rateArgs.matches("[<>]?\\d+")) {
+            throw new ParseException(Rate.MESSAGE_INVALID_RATE_RANGE_DELIMITER);
+        }
+
+        // Detect negative rate like r/-10 (but not range like 10-20)
+        if (rateArgs.matches("-\\d+")) {
+            throw new ParseException(Rate.MESSAGE_NEGATIVE_RATE_NOT_ALLOWED);
+        }
+
         // Case 1: Less-than search, e.g. r/<10
         if (rateArgs.startsWith("<")) {
             String num = rateArgs.substring(1).trim();

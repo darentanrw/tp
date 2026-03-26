@@ -24,6 +24,13 @@ public class Rate {
             "Invalid rate range: lower bound cannot be greater than upper bound.\n"
                     + "Ensure LOWER ≤ UPPER (e.g. r/10-20).";
 
+    public static final String MESSAGE_INVALID_RATE_RANGE_DELIMITER =
+            "Invalid rate range format. Use r/LOWER-UPPER with '-' between the bounds, "
+                    + "e.g. r/10-20.";
+
+    public static final String MESSAGE_NEGATIVE_RATE_NOT_ALLOWED =
+            "Rate cannot be negative. Please enter a non-negative value.";
+
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.

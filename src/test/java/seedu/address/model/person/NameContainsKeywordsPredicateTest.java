@@ -45,13 +45,9 @@ public class NameContainsKeywordsPredicateTest {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Multiple keywords
+        // Multiple keywords (AND)
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // Only one matching keyword
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
 
         // Mixed-case keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
@@ -68,10 +64,15 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
+        // Only one matching keyword
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
         // Keywords match phone, email and address, but does not match name
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("12345", "alice@email.com", "Main", "Street"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice").withPhone("12345")
-                .withEmail("alice@email.com").withAddress("Main Street").build()));
+        assertFalse(predicate.test(
+                new PersonBuilder().withName("Alice").withPhone("12345")
+                        .withEmail("alice@email.com").withAddress("Main Street").build()));
     }
 
     @Test
@@ -79,7 +80,8 @@ public class NameContainsKeywordsPredicateTest {
         List<String> keywords = List.of("keyword1", "keyword2");
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(keywords);
 
-        String expected = NameContainsKeywordsPredicate.class.getCanonicalName() + "{keywords=" + keywords + "}";
+        String expected = NameContainsKeywordsPredicate.class.getCanonicalName()
+                + "{keywords=" + keywords + "}";
         assertEquals(expected, predicate.toString());
     }
 }

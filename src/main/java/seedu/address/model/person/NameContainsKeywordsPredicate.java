@@ -12,14 +12,42 @@ import seedu.address.commons.util.ToStringBuilder;
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
+    /**
+     * Constructs a {@code NameContainsKeywordsPredicate}.
+     *
+     * @param keywords The list of keywords to search for.
+     */
     public NameContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
     public boolean test(Person person) {
+        // Single-level-of-abstraction: validate -> prepare -> delegate to matching strategy.
+        if (isKeywordsEmpty()) {
+            return false;
+        }
+
+        String fullName = getPersonFullName(person);
+
+        return matchesAll(fullName);
+    }
+
+    private boolean isKeywordsEmpty() {
+        return keywords == null || keywords.isEmpty();
+    }
+
+    private String getPersonFullName(Person person) {
+        return person.getName().fullName;
+    }
+
+    private boolean matchesAll(String fullName) {
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordPrefixIgnoreCase(person.getName().fullName, keyword));
+                .allMatch(keyword -> matchesKeyword(fullName, keyword));
+    }
+
+    private boolean matchesKeyword(String fullName, String keyword) {
+        return StringUtil.containsWordPrefixIgnoreCase(fullName, keyword);
     }
 
     @Override
@@ -39,6 +67,8 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", keywords).toString();
+        return new ToStringBuilder(this)
+                .add("keywords", keywords)
+                .toString();
     }
 }

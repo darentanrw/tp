@@ -79,21 +79,6 @@ public class FindCommand extends Command {
     }
 
     private String buildResultMessage(List<PersonIndexPair> pairs) {
-//        StringBuilder sb = new StringBuilder();
-//
-//        if (findDescription != null && !findDescription.isEmpty()) {
-//            sb.append(findDescription).append("\n");
-//        }
-//
-//        sb.append(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, pairs.size()));
-//
-//        for (PersonIndexPair pair : pairs) {
-//            sb.append("\n")
-//                    .append(pair.index)
-//                    .append(". ")
-//                    .append(Messages.format(pair.person));
-//        }
-//        return sb.toString();
         String count = String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, pairs.size());
 
         if (findDescription != null && !findDescription.isEmpty()) {

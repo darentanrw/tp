@@ -179,7 +179,8 @@ The uniqueness of a `Person` is determined by the following fields:
 - Phone number
 - Email address
 
-The system prevents duplicates by checking these fields in `UniquePersonList` before adding or editing a person.
+Duplicate checks are performed in `AddCommand` and `EditCommand` before delegating to the model.
+If a duplicate is detected, a `CommandException` is thrown immediately with an appropriate error message.
 
 If any of the following conditions are met:
 - A person with the same name already exists

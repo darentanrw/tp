@@ -217,7 +217,7 @@ services.
 
 <box type="warning" seamless>
 
-**Note:** Adding a tutor with the same name as an existing entry is not allowed. Tuto treats this as a duplicate. If two tutors happen to share a name, consider using a middle initial to differentiate them.
+**Note:** Adding a tutor with the same name, phone number, or email as an existing entry is not allowed. Tuto treats each field as unique and will reject the operation if any duplicate is detected. If two tutors happen to share a name, consider using a middle initial to differentiate them.
 
 </box>
 
@@ -314,6 +314,12 @@ edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT] [r/RATE] [t/TAG]
 <box type="warning" seamless>
 
 **Note:** Editing tags **replaces all existing tags** — it does not add to them. To remove all tags, use `t/` with nothing after it. To keep existing tags while adding a new one, you must retype all the tags you want to keep.
+
+</box>
+
+<box type="warning" seamless>
+
+**Note:** Editing a tutor with the same name, phone number, or email as an existing entry is not allowed. Tuto treats each field as unique and will reject the operation if any duplicate is detected. If two tutors happen to share a name, consider using a middle initial to differentiate them.
 
 </box>
 

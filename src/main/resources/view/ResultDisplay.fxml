@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.VBox?>
 
 <StackPane fx:id="placeHolder" styleClass="stack-pane" xmlns="http://javafx.com/javafx/17"
-    xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: transparent;">
-  <TextArea fx:id="resultDisplay" editable="false" wrapText="true" styleClass="result-display"/>
+    xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: transparent;" minHeight="0">
+  <TextArea fx:id="resultDisplay" editable="false" wrapText="true" styleClass="result-display" minHeight="0"/>
     <VBox fx:id="resultListContainer" styleClass="result-display"
-          visible="false" spacing="20">
+          visible="false" spacing="20" minHeight="0">
         <Label fx:id="resultDescriptionDisplay" wrapText="true"
                styleClass="result-description-label"
                maxWidth="Infinity"/>
-        <ListView fx:id="resultListView" VBox.vgrow="ALWAYS"/>
+        <ListView fx:id="resultListView" VBox.vgrow="ALWAYS" minHeight="0"/>
     </VBox>
 </StackPane>

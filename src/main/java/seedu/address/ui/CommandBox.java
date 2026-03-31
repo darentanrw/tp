@@ -1,8 +1,5 @@
 package seedu.address.ui;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -10,7 +7,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -22,7 +18,6 @@ public class CommandBox extends UiPart<Region> {
 
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
-    private Timeline resizeTimeline;
 
     private final CommandExecutor commandExecutor;
 
@@ -76,32 +71,40 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
-        Text text = new Text(commandTextField.getText());
+        String content = commandTextField.getText();
+        if (content == null || content.isEmpty()) {
+            content = " "; // use a placeholder to calculate minimum height
+        } else if (content.endsWith("\n")) {
+            content += " "; // so that trailing newlines are accounted for by Text bounds
+        }
+
+        Text text = new Text(content);
         text.setFont(commandTextField.getFont());
         text.setWrappingWidth(width - 60); // Buffer for padding and scrollbar
 
         double height = text.getLayoutBounds().getHeight();
 
-        double fontSize = commandTextField.getFont().getSize();
-        double verticalBuffer = fontSize + 20;
-
-        double newHeight = Math.ceil(height + verticalBuffer);
+        // Add proper vertical padding (top + bottom) + borders + buffer
+        double newHeight = Math.ceil(height + 40);
 
         if (newHeight < 50) {
             newHeight = 50;
         }
 
-        double maxHeight = 200;
+        double maxHeight = 350;
         double targetHeight = Math.min(newHeight, maxHeight);
 
-        if (commandTextField.getPrefHeight() != targetHeight) {
-            if (resizeTimeline != null) {
-                resizeTimeline.stop();
-            }
 
-            resizeTimeline = new Timeline(new KeyFrame(Duration.millis(50),
-                    new KeyValue(commandTextField.prefHeightProperty(), targetHeight)));
-            resizeTimeline.play();
+        if (commandTextField.getPrefHeight() != targetHeight) {
+            commandTextField.setPrefHeight(targetHeight);
+            
+            if (newHeight <= maxHeight) {
+                commandTextField.setScrollTop(0);
+            }
+        } else {
+            if (newHeight <= maxHeight) {
+                commandTextField.setScrollTop(0);
+            }
         }
 
         if (isPaste && newHeight > maxHeight) {

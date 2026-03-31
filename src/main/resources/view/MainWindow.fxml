@@ -53,11 +53,11 @@
                     <Insets top="8" right="8" bottom="8" left="8" />
                 </padding>
                 <StackPane fx:id="resultDisplayPlaceholder" VBox.vgrow="ALWAYS"
-                           minWidth="450" style="-fx-background-color: transparent;">
+                           minWidth="450" minHeight="0" style="-fx-background-color: transparent;">
                 </StackPane>
 
                 <StackPane fx:id="commandBoxPlaceholder" VBox.vgrow="NEVER" minWidth="450" minHeight="67.5"
-                           maxHeight="200"
+                           maxHeight="350" alignment="BOTTOM_CENTER"
                            style="-fx-background-color: transparent;">
                 </StackPane>
               </VBox>

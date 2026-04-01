@@ -19,6 +19,11 @@ public class CommandBox extends UiPart<Region> {
     public static final String ERROR_STYLE_CLASS = "error";
     private static final String FXML = "CommandBox.fxml";
 
+    private static final double MIN_HEIGHT = 50.0;
+    private static final double MAX_HEIGHT = 350.0;
+    private static final double HEIGHT_PADDING_BUFFER = 40.0;
+    private static final double WIDTH_PADDING_BUFFER = 60.0;
+
     private final CommandExecutor commandExecutor;
 
     @FXML
@@ -32,6 +37,7 @@ public class CommandBox extends UiPart<Region> {
         this.commandExecutor = commandExecutor;
         commandTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             setStyleToDefault();
+
             int oldLength;
             if (oldValue == null) {
                 oldLength = 0;
@@ -45,16 +51,18 @@ public class CommandBox extends UiPart<Region> {
             } else {
                 newLength = newValue.length();
             }
+
             boolean isPaste = (newLength - oldLength) > 1;
             handleHeightChange(isPaste);
         });
 
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                if (!event.isShiftDown()) {
-                    event.consume();
-                    handleCommandEntered();
-                }
+            boolean isEnterKey = event.getCode() == KeyCode.ENTER;
+            boolean isShiftDown = event.isShiftDown();
+
+            if (isEnterKey && !isShiftDown) {
+                event.consume();
+                handleCommandEntered();
             }
         });
 
@@ -71,43 +79,56 @@ public class CommandBox extends UiPart<Region> {
             return;
         }
 
-        String content = commandTextField.getText();
-        if (content == null || content.isEmpty()) {
-            content = " "; // use a placeholder to calculate minimum height
-        } else if (content.endsWith("\n")) {
-            content += " "; // so that trailing newlines are accounted for by Text bounds
-        }
+        double newHeight = computeContentHeight(width);
+        double targetHeight = Math.min(newHeight, MAX_HEIGHT);
+
+        updateCommandBoxHeight(targetHeight);
+        adjustScrollPosition(newHeight, isPaste);
+    }
+
+    /**
+     * Computes the height required for the content in the command box.
+     */
+    private double computeContentHeight(double width) {
+        String content = getFormattedTextContent();
 
         Text text = new Text(content);
         text.setFont(commandTextField.getFont());
-        text.setWrappingWidth(width - 60); // Buffer for padding and scrollbar
+        text.setWrappingWidth(width - WIDTH_PADDING_BUFFER);
 
         double height = text.getLayoutBounds().getHeight();
+        double computedHeight = Math.ceil(height + HEIGHT_PADDING_BUFFER);
 
-        // Add proper vertical padding (top + bottom) + borders + buffer
-        double newHeight = Math.ceil(height + 40);
+        return Math.max(computedHeight, MIN_HEIGHT);
+    }
 
-        if (newHeight < 50) {
-            newHeight = 50;
+    /**
+     * Formats the text content to ensure accurate height calculation.
+     */
+    private String getFormattedTextContent() {
+        String content = commandTextField.getText();
+        if (content == null || content.isEmpty()) {
+            return " "; // use a placeholder to calculate minimum heigh
+        } else if (content.endsWith("\n")) {
+            return content + " "; // so that trailing newlines are accounted for by Text bounds
         }
+        return content;
+    }
 
-        double maxHeight = 350;
-        double targetHeight = Math.min(newHeight, maxHeight);
-
-
+    /**
+     * Updates the command box preferred height if it differs from the target.
+     */
+    private void updateCommandBoxHeight(double targetHeight) {
         if (commandTextField.getPrefHeight() != targetHeight) {
             commandTextField.setPrefHeight(targetHeight);
-            
-            if (newHeight <= maxHeight) {
-                commandTextField.setScrollTop(0);
-            }
-        } else {
-            if (newHeight <= maxHeight) {
-                commandTextField.setScrollTop(0);
-            }
         }
+    }
 
-        if (isPaste && newHeight > maxHeight) {
+    /**
+     * Adjusts the scroll position of the command box.
+     */
+    private void adjustScrollPosition(double newHeight, boolean isPaste) {
+        if (newHeight <= MAX_HEIGHT || isPaste) {
             commandTextField.setScrollTop(0);
         }
     }

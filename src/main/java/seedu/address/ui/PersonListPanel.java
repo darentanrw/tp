@@ -44,13 +44,27 @@ public class PersonListPanel extends UiPart<Region> {
     private void initializeListView() {
         personListView.setItems(displayedPersons);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+        updatePlaceholder();
     }
 
     private void initializeHeaderListeners() {
         ObservableList<Person> allPersons = logic.getAddressBook().getPersonList();
-        ListChangeListener<Person> headerRefreshListener = c -> updateHeaderLabels();
+        ListChangeListener<Person> headerRefreshListener = c -> {
+            updateHeaderLabels();
+            updatePlaceholder();
+        };
         allPersons.addListener(headerRefreshListener);
         displayedPersons.addListener(headerRefreshListener);
+    }
+
+    private void updatePlaceholder() {
+        if (displayedPersons.isEmpty()) {
+            Label placeholder = new Label("No tutors found.");
+            placeholder.setStyle("-fx-text-fill: grey; -fx-alignment: center; -fx-padding: 20;");
+            personListView.setPlaceholder(placeholder);
+        } else {
+            personListView.setPlaceholder(null);
+        }
     }
 
     /**
@@ -68,7 +82,7 @@ public class PersonListPanel extends UiPart<Region> {
 
     private String getContactHeaderTitle(int numContacts) {
         if (numContacts == 0) {
-            return "No Contacts Yet";
+            return "Tuto has no Contacts Yet";
         } else if (numContacts == 1) {
             return "Tuto has 1 Contact";
         } else {

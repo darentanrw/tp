@@ -46,9 +46,21 @@ public class ResultDisplay extends UiPart<Region> {
 
     public void setFeedbackToUser(String feedbackToUser) {
         requireNonNull(feedbackToUser);
+        showFeedbackTextArea(feedbackToUser);
+        hideResultListContainer();
+        clearResultList();
+    }
+
+    private void showFeedbackTextArea(String feedbackToUser) {
         resultDisplay.setText(feedbackToUser);
         resultDisplay.setVisible(true);
+    }
+
+    private void hideResultListContainer() {
         resultListContainer.setVisible(false);
+    }
+
+    private void clearResultList() {
         resultListView.getItems().clear();
     }
 
@@ -93,8 +105,13 @@ public class ResultDisplay extends UiPart<Region> {
             return;
         }
         boolean hasDescription = description != null && !description.isEmpty();
-        resultDescriptionDisplay.setText(hasDescription ? description : "");
-        resultDescriptionDisplay.setVisible(hasDescription);
+        if (hasDescription) {
+            resultDescriptionDisplay.setText(description);
+            resultDescriptionDisplay.setVisible(true);
+        } else {
+            resultDescriptionDisplay.setText("");
+            resultDescriptionDisplay.setVisible(false);
+        }
     }
 
     /**

@@ -13,7 +13,7 @@
           visible="false" spacing="20" minHeight="0">
         <Label fx:id="resultDescriptionDisplay" wrapText="true"
                styleClass="result-description-label"
-               maxWidth="Infinity"/>
+               maxWidth="Infinity" minHeight="-Infinity"/>
         <ListView fx:id="resultListView" VBox.vgrow="ALWAYS" minHeight="0"/>
     </VBox>
 </StackPane>

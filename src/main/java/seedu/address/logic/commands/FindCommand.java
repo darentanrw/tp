@@ -23,21 +23,11 @@ public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds tutors by name, subject, hourly rate, "
-            + "or universally across all fields.\n"
-            + "Parameters: [KEYWORD [MORE_KEYWORDS]] [n/NAME [MORE_NAME_KEYWORDS]] [s/SUBJECT]... [r/RATE]\n"
-            + "Note: Unprefixed keywords (universal search) must appear before any prefixes.\n"
-            + "If keywords are placed after a prefix, they are treated as that prefix's value.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds tutors by keywords.\n"
+            + "Format: " + COMMAND_WORD + " [KEYWORD] [n/NAME] [s/SUBJECT]... [r/RATE]\n"
             + "Examples:\n"
-            + COMMAND_WORD + " alice\n"
-            + COMMAND_WORD + " 50\n"
-            + COMMAND_WORD + " n/Jo\n"
-            + COMMAND_WORD + " s/Math s/Science\n"
-            + COMMAND_WORD + " r/16\n"
-            + COMMAND_WORD + " r/<10\n"
-            + COMMAND_WORD + " r/>10\n"
-            + COMMAND_WORD + " r/10-20\n"
-            + COMMAND_WORD + " n/Alex r/15 s/Chemistry";
+            + "• " + COMMAND_WORD + " alice\n"
+            + "• " + COMMAND_WORD + " n/Alex r/15-20 s/Math";
 
     private final Predicate<Person> predicate;
     private final String findDescription;

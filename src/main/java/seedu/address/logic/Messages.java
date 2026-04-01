@@ -12,8 +12,8 @@ import seedu.address.model.person.Person;
  */
 public class Messages {
 
-    public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command! Please refer to the help window "
-            + "for the list of available commands.";
+    public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command! Type 'help' to open the help window "
+            + "and see the list of available commands.";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format!\n%1$s";
     public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The tutor index provided is invalid! "
             + "Please provide an index between 1 and the list size.";

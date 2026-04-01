@@ -15,6 +15,12 @@ import seedu.address.model.person.Person;
  */
 public class PersonListPanel extends UiPart<Region> {
     private static final String FXML = "PersonListPanel.fxml";
+    private static final String EMPTY_LIST_PLACEHOLDER_TEXT = "No tutors found.";
+    private static final String EMPTY_LIST_PLACEHOLDER_STYLE = "-fx-text-fill: grey; "
+            + "-fx-alignment: center; -fx-padding: 20;";
+    private static final String NO_CONTACTS_TITLE = "Tuto has no Contacts Yet";
+    private static final String ONE_CONTACT_TITLE = "Tuto has 1 Contact";
+    private static final String MULTIPLE_CONTACTS_TITLE_FORMAT = "Tuto has %d Contacts";
 
     private final Logic logic;
     private final ObservableList<Person> displayedPersons;
@@ -59,8 +65,8 @@ public class PersonListPanel extends UiPart<Region> {
 
     private void updatePlaceholder() {
         if (displayedPersons.isEmpty()) {
-            Label placeholder = new Label("No tutors found.");
-            placeholder.setStyle("-fx-text-fill: grey; -fx-alignment: center; -fx-padding: 20;");
+            Label placeholder = new Label(EMPTY_LIST_PLACEHOLDER_TEXT);
+            placeholder.setStyle(EMPTY_LIST_PLACEHOLDER_STYLE);
             personListView.setPlaceholder(placeholder);
         } else {
             personListView.setPlaceholder(null);
@@ -82,11 +88,11 @@ public class PersonListPanel extends UiPart<Region> {
 
     private String getContactHeaderTitle(int numContacts) {
         if (numContacts == 0) {
-            return "Tuto has no Contacts Yet";
+            return NO_CONTACTS_TITLE;
         } else if (numContacts == 1) {
-            return "Tuto has 1 Contact";
+            return ONE_CONTACT_TITLE;
         } else {
-            return "Tuto has " + numContacts + " Contacts";
+            return String.format(MULTIPLE_CONTACTS_TITLE_FORMAT, numContacts);
         }
     }
 

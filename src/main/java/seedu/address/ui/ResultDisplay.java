@@ -20,6 +20,13 @@ import seedu.address.logic.commands.CommandResult.PersonIndexPair;
 public class ResultDisplay extends UiPart<Region> {
 
     private static final String FXML = "ResultDisplay.fxml";
+    private static final String ERROR_STYLE_CLASS = "error";
+    private static final String SUCCESS_STYLE_CLASS = "success";
+    private static final String ERROR_ICON = "❌  ";
+    private static final String SUCCESS_ICON = "✨  ";
+    private static final String EMPTY_LIST_PLACEHOLDER_TEXT = "No tutors found.";
+    private static final String EMPTY_LIST_PLACEHOLDER_STYLE = "-fx-text-fill: grey; "
+            + "-fx-alignment: center; -fx-padding: 20;";
 
     @FXML
     private TextArea resultDisplay;
@@ -45,15 +52,39 @@ public class ResultDisplay extends UiPart<Region> {
     }
 
     public void setFeedbackToUser(String feedbackToUser) {
+        setFeedbackToUser(feedbackToUser, false);
+    }
+
+    public void setFeedbackToUser(String feedbackToUser, boolean isError) {
         requireNonNull(feedbackToUser);
-        showFeedbackTextArea(feedbackToUser);
+        showFeedbackTextArea(feedbackToUser, isError);
         hideResultListContainer();
         clearResultList();
     }
 
-    private void showFeedbackTextArea(String feedbackToUser) {
-        resultDisplay.setText(feedbackToUser);
+    private void showFeedbackTextArea(String feedbackToUser, boolean isError) {
+        if (isError) {
+            resultDisplay.setText(ERROR_ICON + feedbackToUser);
+            setStyleToIndicateError();
+        } else {
+            resultDisplay.setText(SUCCESS_ICON + feedbackToUser);
+            setStyleToIndicateSuccess();
+        }
         resultDisplay.setVisible(true);
+    }
+
+    private void setStyleToIndicateError() {
+        resultDisplay.getStyleClass().remove(SUCCESS_STYLE_CLASS);
+        if (!resultDisplay.getStyleClass().contains(ERROR_STYLE_CLASS)) {
+            resultDisplay.getStyleClass().add(ERROR_STYLE_CLASS);
+        }
+    }
+
+    private void setStyleToIndicateSuccess() {
+        resultDisplay.getStyleClass().remove(ERROR_STYLE_CLASS);
+        if (!resultDisplay.getStyleClass().contains(SUCCESS_STYLE_CLASS)) {
+            resultDisplay.getStyleClass().add(SUCCESS_STYLE_CLASS);
+        }
     }
 
     private void hideResultListContainer() {
@@ -92,8 +123,8 @@ public class ResultDisplay extends UiPart<Region> {
 
     private void updatePlaceholder(boolean isEmpty) {
         if (isEmpty) {
-            Label placeholder = new Label("No tutors found.");
-            placeholder.setStyle("-fx-text-fill: grey; -fx-alignment: center; -fx-padding: 20;");
+            Label placeholder = new Label(EMPTY_LIST_PLACEHOLDER_TEXT);
+            placeholder.setStyle(EMPTY_LIST_PLACEHOLDER_STYLE);
             resultListView.setPlaceholder(placeholder);
         } else {
             resultListView.setPlaceholder(null);

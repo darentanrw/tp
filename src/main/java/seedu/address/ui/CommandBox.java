@@ -21,7 +21,7 @@ public class CommandBox extends UiPart<Region> {
 
     private static final double MIN_HEIGHT = 50.0;
     private static final double MAX_HEIGHT = 350.0;
-    private static final double HEIGHT_PADDING_BUFFER = 40.0;
+    private static final double HEIGHT_PADDING_BUFFER = 50.0;
     private static final double WIDTH_PADDING_BUFFER = 60.0;
 
     private final CommandExecutor commandExecutor;

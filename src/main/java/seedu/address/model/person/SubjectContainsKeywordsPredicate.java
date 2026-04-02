@@ -1,6 +1,7 @@
 package seedu.address.model.person;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -38,15 +39,19 @@ public class SubjectContainsKeywordsPredicate implements Predicate<Person> {
 
     private List<String> getPersonSubjectsLower(Person person) {
         return person.getSubjects().stream()
-                .map(subject -> getLowerSubject(subject))
+                .map(subject -> getNormalizedLowerSubject(subject))
                 .toList();
     }
 
-    private String getLowerSubject(Subject subject) {
+    private String getNormalizedLowerSubject(Subject subject) {
         if (subject.subject == null) {
             return "";
         }
-        return subject.subject.toLowerCase();
+        return normalizeSpaces(subject.subject.toLowerCase());
+    }
+
+    private String normalizeSpaces(String subject) {
+        return subject.trim().replaceAll("\\s+", " ");
     }
 
     private boolean matchesAll(List<String> personSubjectsLower) {
@@ -61,12 +66,7 @@ public class SubjectContainsKeywordsPredicate implements Predicate<Person> {
         String kwLower = keyword.toLowerCase().trim().replaceAll("\\s+", " ");
 
         return personSubjectsLower.stream()
-                .map(subject -> normalizeSpaces(subject))
                 .anyMatch(normalizedSubject -> isSubjectMatchingNormalizedKeyword(normalizedSubject, kwLower));
-    }
-
-    private String normalizeSpaces(String subject) {
-        return subject.trim().replaceAll("\\s+", " ");
     }
 
     private boolean isSubjectMatchingNormalizedKeyword(String normalizedSubject, String kwLower) {
@@ -89,7 +89,7 @@ public class SubjectContainsKeywordsPredicate implements Predicate<Person> {
 
         SubjectContainsKeywordsPredicate otherSubjectContainsKeywordsPredicate =
                 (SubjectContainsKeywordsPredicate) other;
-        return keywords.equals(otherSubjectContainsKeywordsPredicate.keywords);
+        return Objects.equals(keywords, otherSubjectContainsKeywordsPredicate.keywords);
     }
 
     @Override

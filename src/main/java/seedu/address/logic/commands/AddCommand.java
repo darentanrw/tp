@@ -60,10 +60,6 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasPerson(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-        }
-
         if (model.hasDuplicatePhone(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PHONE);
         }

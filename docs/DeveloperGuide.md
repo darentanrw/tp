@@ -6,8 +6,41 @@
 
 # Tuto Developer Guide
 
+<box type="info" seamless>
+
+**Welcome to the Tuto Developer Guide!**
+This document describes the architecture, software design decisions, and implementation details of Tuto. 
+It is intended for future developers, maintainers, and anyone interested in understanding the technical inner workings of the application.
+
+</box>
+
 <!-- * Table of Contents -->
 <page-nav-print />
+
+---
+
+## Table of Contents
+- [Acknowledgements](#acknowledgements)
+- [Setting up, getting started](#setting-up-getting-started)
+- [Design](#design)
+  - [Architecture](#architecture)
+  - [UI component](#ui-component)
+  - [Logic component](#logic-component)
+  - [Model component](#model-component)
+  - [Storage component](#storage-component)
+  - [Common classes](#common-classes)
+- [Implementation](#implementation)
+  - [Adding a Tutor : `add`](#adding-a-tutor--add)
+  - [Uniqueness Constraints](#uniqueness-constraints)
+  - [Finding a Tutor : `find`](#finding-a-tutor--find)
+- [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+- [Appendix: Requirements](#appendix-requirements)
+  - [Product scope](#product-scope)
+  - [User stories](#user-stories)
+  - [Use cases](#use-cases)
+  - [Non-Functional Requirements](#non-functional-requirements)
+  - [Glossary](#glossary)
+- [Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)
 
 ---
 
@@ -92,7 +125,7 @@ The following sequence diagram illustrates the interactions between the `UI` and
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
+The **API** of this component is specified in [`Logic.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -127,7 +160,7 @@ How the parsing works:
 
 ### Model component
 
-**API** : [`Model.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/model/Model.java)
+The **API** of this component is specified in [`Model.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
@@ -148,7 +181,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
+The **API** of this component is specified in [`Storage.java`](https://github.com/AY2526S2-CS2103T-T15-3/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
@@ -196,6 +229,8 @@ The sequence of interactions is as follows:
 - If the input format from user is invalid, a `ParseException` is thrown during parsing and the `command` object is not created.
 - If the person already exists in the address book, a `CommandException` is thrown and the operation is aborted.
 - If the phone or email already exists, a `CommandException` is thrown and the operation is aborted.
+---
+
 ### Uniqueness Constraints
 
 To ensure data integrity, the application enforces uniqueness constraints on each `Person`.
@@ -249,6 +284,8 @@ and how they interact structurally.
 The following diagram illustrates how duplicate checks are performed during an `add` or `edit` operation:
 
 <puml src="diagrams/UniquenessConstraintSequence.puml" />
+
+---
 
 ### Finding a Tutor : `find`
 

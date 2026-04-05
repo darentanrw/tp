@@ -318,6 +318,11 @@ The diagram below shows the parser classes involved in handling the `find` comma
 
 <puml src="diagrams/FindParserClassDiagram.puml" width="500"/>
 
+#### Alternative flows
+- If the search arguments are empty or invalid, a `ParseException` is thrown during parsing and the `Command` object is not created.
+- If the search yields no matches, `FindCommand` still executes successfully. The displayed list is simply empty, but the query bar in the UI is still appropriately updated to show what keywords were searched.
+
+
 #### Search Modalities
 
 The `find` command supports three modalities of searching, enabling users to find tutor profiles flexibly:
@@ -342,7 +347,7 @@ Users can combine general search keywords with specific attribute filters to eff
 
 #### Design Considerations
 
-**Aspect: Search Modalities and User Experience**
+##### Aspect: Search Modalities and User Experience
 
 The design of the `find` command heavily factors in natural human searching patterns and the progressive disclosure of complexity.
 
@@ -362,9 +367,17 @@ The design of the `find` command heavily factors in natural human searching patt
 - **Pros:** Maximum simplicity for both the user interface and the underlying parser.
 - **Cons:** Severely lacks precision. Evaluating mathematical bounds (like finding a tutor whose rate is `<50`) or filtering strictly by a subject is practically impossible to guarantee using flat string-matching.
 
-#### Alternative flows
-- If the search arguments are empty or invalid, a `ParseException` is thrown during parsing and the `Command` object is not created.
-- If the search yields no matches, `FindCommand` still executes successfully. The displayed list is simply empty, but the query bar in the UI is still appropriately updated to show what keywords were searched.
+##### Aspect: UI Context and the Query Bar
+
+Standard commands return temporary text feedback. However, a `find` command shows a dynamically built list of Tutors, which risks heavily confusing the user if they forget their search modifiers (especially if no matches are found).
+
+**Alternative 1 (Current choice): Dynamic Query Bar Description**
+- **Pros:** Excellent UX. By parsing back the user's query into a human-readable `description` inside the `CommandResult`, the UI permanently displays the active search constraints above the list. It tells the user exactly *why* the list looks the way it does.
+- **Cons / Opportunity costs:** Modifies the standard `CommandResult` object to carry an optional `description` string, mildly coupling what is classically a Logic-tier object to the specific layout needs of the UI tier.
+
+**Alternative 2: Standard text feedback only (e.g., "0 persons listed")**
+- **Pros:** Keeps `CommandResult` pure and strictly decoupled from UI-specific display needs, reducing data passing.
+- **Cons:** Severe usability flaw. If the user executes a complex filter like `find Math r/<50` and the app just says "0 persons listed" while showing an empty UI, the user immediately loses context of the active constraints governing the screen.
 
 ---
 

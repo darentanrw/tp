@@ -318,6 +318,28 @@ The diagram below shows the parser classes involved in handling the `find` comma
 
 <puml src="diagrams/FindParserClassDiagram.puml" width="500"/>
 
+#### Search Modalities
+
+The `find` command supports three modalities of searching, enabling users to find tutor profiles flexibly:
+
+**1. General Search (Universal Search)**
+Users can provide keywords without any prefixes. 
+- **Example:** `find alice math`
+- **Implementation:** The `FindCommandParser` treats these prefix-less keywords as the preamble. It extracts these keywords and constructs a `UniversalSearchPredicate`. This predicate evaluates if *any* of the tutor's relevant fields (such as name, subject, or tags) match the specified keywords.
+
+**2. Attribute Filtering**
+Users can search for specific attributes using prefixes (e.g., `n/`, `s/`, `r/`, `t/`). 
+- **Example:** `find n/alice r/10-30`
+- **Implementation:** `FindCommandParser` parses the mapped values for each specified prefix. 
+  - It creates specific predicates for each attribute (e.g., `NameContainsKeywordsPredicate`, `RateRangePredicate`, `SubjectContainsKeywordsPredicate`). 
+  - Multiple prefixes are supported. For subjects and tags (e.g., `s/Math s/Physics`), multiple occurrences are combined using OR logic within their respective predicates.
+  - Rate filtering dynamically handles various mathematical boundaries (e.g., exact `r/50`, ranges `r/40-60`, or inequalities `r/<50`).
+
+**3. General Search + Attribute Filtering**
+Users can combine general search keywords with specific attribute filters to effectively refine their results.
+- **Example:** `find alice r/<50`
+- **Implementation:** When `FindCommandParser` detects both a preamble and specific prefixes, it validates that only supported refinement prefixes (`n/`, `s/`, `r/`, `t/`) are used to prevent logical conflicts. It then constructs a **combined predicate** by chaining the `UniversalSearchPredicate` and the attribute-specific predicates together using a logical `AND` (`Predicate.and()`). This ensures the displayed list heavily filters the broad keyword search against the strict attribute constraints.
+
 #### Alternative flows
 - If the search arguments are empty or invalid, a `ParseException` is thrown during parsing and the `Command` object is not created.
 - If the search yields no matches, `FindCommand` still executes successfully. The displayed list is simply empty, but the query bar in the UI is still appropriately updated to show what keywords were searched.

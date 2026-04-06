@@ -30,9 +30,9 @@ It is intended for future developers, maintainers, and anyone interested in unde
   - [Storage component](#storage-component)
   - [Common classes](#common-classes)
 - [Implementation](#implementation)
-  - [Adding a Tutor : `add`](#adding-a-tutor--add)
+  - [Adding a Tutor : `add`](#adding-a-tutor-add)
   - [Uniqueness Constraints](#uniqueness-constraints)
-  - [Finding a Tutor : `find`](#finding-a-tutor--find)
+  - [Finding a Tutor : `find`](#finding-a-tutor-find)
 - [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
 - [Appendix: Requirements](#appendix-requirements)
   - [Product scope](#product-scope)
@@ -201,7 +201,7 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Adding a Tutor : `add`
+### Adding a Tutor: `add`
 
 Adds a new tutor profile to Tuto. 
 The sequence diagram below illustrates the interactions between the Logic and Model components during the execution of the `add` command.
@@ -297,7 +297,7 @@ The following diagram illustrates how duplicate checks are performed during an `
 
 ---
 
-### Finding a Tutor : `find`
+### Finding a Tutor: `find`
 
 Finds a tutor profile saved in Tuto. The sequence diagrams below illustrate the interactions between the UI, Logic, and Model 
 components during the execution of the `find` command.

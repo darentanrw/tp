@@ -452,13 +452,13 @@ Returns tutors teaching History within a rate range
 **Combined search**
 ```
 find math s/advanced math
-find n/Qi r/60 s/History
+find n/Qi r/70 s/History
 ```
 Narrows a general keyword search with prefix filters, or combines multiple prefix conditions.
 
 ![Result for 'find math s/advanced math'](images/find_math_S_advancedmath.png)
 
-![Result for 'find n/Qi r/60 s/History'](images/find_N_qi_R_60_S_history.png)
+![Result for 'find n/Qi r/70 s/History'](images/find_N_qi_R_70_S_history.png)
 
 ---
 

@@ -42,8 +42,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "F2F "
             + PREFIX_TAG + "cafe";
 
-    public static final String MESSAGE_SUCCESS = "New tutor added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This tutor already exists in Tuto!";
+    public static final String MESSAGE_SUCCESS = "New tutor added!";
     public static final String MESSAGE_DUPLICATE_PHONE = "Another tutor already uses this phone number!";
     public static final String MESSAGE_DUPLICATE_EMAIL = "Another tutor already uses this email address!";
 

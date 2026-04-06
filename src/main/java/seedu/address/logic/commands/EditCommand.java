@@ -52,9 +52,8 @@ public class EditCommand extends Command {
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited tutor: %1$s";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Tutor updated!";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This tutor already exists in Tuto!";
     public static final String MESSAGE_DUPLICATE_PHONE = "Another tutor already uses this phone number!";
     public static final String MESSAGE_DUPLICATE_EMAIL = "Another tutor already uses this email address!";
 

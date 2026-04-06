@@ -197,9 +197,13 @@ public class MainWindow extends UiPart<Stage> {
      */
     private void displayResult(CommandResult commandResult) {
         if (commandResult.getFoundPersons().isPresent()) {
+            String headerText = commandResult.getDescription().isPresent()
+                    ? commandResult.getDescription().get()
+                    : commandResult.getFeedbackToUser();
+
             resultDisplay.setPersonList(
                     commandResult.getFoundPersons().get(),
-                    commandResult.getDescription().orElse("")
+                    headerText
             );
         } else {
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());

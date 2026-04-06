@@ -59,7 +59,11 @@ public class PersonCard extends UiPart<Region> {
     }
 
     private void initializeIdAndName(int displayedIndex) {
-        id.setText(displayedIndex + ". ");
+        if (displayedIndex > 0) {
+            id.setText(displayedIndex + ". ");
+        } else {
+            id.setText("");
+        }
         name.setText(person.getName().fullName);
     }
 

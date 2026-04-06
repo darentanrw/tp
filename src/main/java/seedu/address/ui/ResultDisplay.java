@@ -135,13 +135,20 @@ public class ResultDisplay extends UiPart<Region> {
         if (resultDescriptionDisplay == null) {
             return;
         }
+
         boolean hasDescription = description != null && !description.isEmpty();
         if (hasDescription) {
             resultDescriptionDisplay.setText(description);
             resultDescriptionDisplay.setVisible(true);
+            resultDescriptionDisplay.setManaged(true);
+            resultDescriptionDisplay.setStyle(
+                    "-fx-font-size: 20px; "
+                            + "-fx-font-weight: 700;"
+            );
         } else {
             resultDescriptionDisplay.setText("");
             resultDescriptionDisplay.setVisible(false);
+            resultDescriptionDisplay.setManaged(false);
         }
     }
 

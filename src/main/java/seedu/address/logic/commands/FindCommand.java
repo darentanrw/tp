@@ -24,7 +24,7 @@ public class FindCommand extends Command {
     public static final String COMMAND_WORD = "find";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds tutors by keywords.\n"
-            + "Format: " + COMMAND_WORD + " [KEYWORD] [n/NAME] [s/SUBJECT]... [r/RATE]\n"
+            + "Format: " + COMMAND_WORD + " [KEYWORD] [n/NAME] [s/SUBJECT]... [r/RATE] [t/TAG]...\n"
             + "Examples:\n"
             + "• " + COMMAND_WORD + " alice\n"
             + "• " + COMMAND_WORD + " n/Alex r/15-20 s/Math";

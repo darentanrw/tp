@@ -22,55 +22,55 @@ It is intended for future developers, maintainers, and anyone interested in unde
 ## Table of Contents
 
 - [Tuto Developer Guide](#tuto-developer-guide)
-    - [Table of Contents](#table-of-contents)
-    - [**Acknowledgements**](#acknowledgements)
-    - [**Setting up, getting started**](#setting-up-getting-started)
-    - [**Design**](#design)
-        - [Architecture](#architecture)
-        - [UI component](#ui-component)
-        - [Logic component](#logic-component)
-        - [Model component](#model-component)
-        - [Storage component](#storage-component)
-        - [Common classes](#common-classes)
-    - [**Implementation**](#implementation)
-        - [Adding a Tutor: `add`](#adding-a-tutor-add)
-            - [Alternative flows](#alternative-flows)
-        - [Uniqueness Constraints](#uniqueness-constraints)
-            - [Current Implementation](#current-implementation)
-            - [Design Considerations](#design-considerations)
-            - [Class Diagram](#class-diagram)
-            - [Sequence Diagram](#sequence-diagram)
-        - [Finding a Tutor: `find`](#finding-a-tutor-find)
-            - [Alternative flows](#alternative-flows-1)
-            - [Search Modalities](#search-modalities)
-            - [Design Considerations](#design-considerations-1)
-                - [Aspect: Search Modalities and User Experience](#aspect-search-modalities-and-user-experience)
-                - [Aspect: UI Context and the Query Bar](#aspect-ui-context-and-the-query-bar)
-    - [**Documentation, logging, testing, configuration, dev-ops**](#documentation-logging-testing-configuration-dev-ops)
-    - [**Appendix: Requirements**](#appendix-requirements)
-        - [Product scope](#product-scope)
-        - [User stories](#user-stories)
-        - [Use cases](#use-cases)
-            - [Use Case: U1. View all Tutor Profile](#use-case-u1-view-all-tutor-profile)
-            - [Use Case: U2. View a specific Tutor Profile](#use-case-u2-view-a-specific-tutor-profile)
-            - [Use Case: U3. Delete a Tutor from Tuto](#use-case-u3-delete-a-tutor-from-tuto)
-            - [Use Case: U4. Add a Tutor Profile](#use-case-u4-add-a-tutor-profile)
-            - [Use Case: U5. Search for Tutors by Subject](#use-case-u5-search-for-tutors-by-subject)
-            - [Use Case: U6. Edit a Tutor Profile](#use-case-u6-edit-a-tutor-profile)
-        - [Non-Functional Requirements](#non-functional-requirements)
-        - [Glossary](#glossary)
-    - [**Appendix: Instructions for manual testing**](#appendix-instructions-for-manual-testing)
-        - [Launch and shutdown](#launch-and-shutdown)
-        - [Adding a person](#adding-a-person)
-        - [Deleting a person](#deleting-a-person)
-        - [Finding a person](#finding-a-person)
-            - [Negative Cases \& Error Handling](#negative-cases--error-handling)
-            - [Positive Cases (Universal Search)](#positive-cases-universal-search)
-            - [Complex Cases (Attribute Filtering \& Combinations)](#complex-cases-attribute-filtering--combinations)
-            - [Adversarial \& Edge Cases](#adversarial--edge-cases)
-        - [Sorting the tutor list](#sorting-the-tutor-list)
-            - [Invalid commands and errors](#invalid-commands-and-errors)
-        - [Saving data](#saving-data)
+  - [Table of Contents](#table-of-contents)
+  - [**Acknowledgements**](#acknowledgements)
+  - [**Setting up, getting started**](#setting-up-getting-started)
+  - [**Design**](#design)
+    - [Architecture](#architecture)
+    - [UI component](#ui-component)
+    - [Logic component](#logic-component)
+    - [Model component](#model-component)
+    - [Storage component](#storage-component)
+    - [Common classes](#common-classes)
+  - [**Implementation**](#implementation)
+    - [Adding a Tutor: `add`](#adding-a-tutor-add)
+      - [Alternative flows](#alternative-flows)
+    - [Uniqueness Constraints](#uniqueness-constraints)
+      - [Current Implementation](#current-implementation)
+      - [Design Considerations](#design-considerations)
+      - [Class Diagram](#class-diagram)
+      - [Sequence Diagram](#sequence-diagram)
+    - [Finding a Tutor: `find`](#finding-a-tutor-find)
+      - [Alternative flows](#alternative-flows-1)
+      - [Search Modalities](#search-modalities)
+      - [Design Considerations](#design-considerations-1)
+        - [Aspect: Search Modalities and User Experience](#aspect-search-modalities-and-user-experience)
+        - [Aspect: UI Context and the Query Bar](#aspect-ui-context-and-the-query-bar)
+  - [**Documentation, logging, testing, configuration, dev-ops**](#documentation-logging-testing-configuration-dev-ops)
+  - [**Appendix: Requirements**](#appendix-requirements)
+    - [Product scope](#product-scope)
+    - [User stories](#user-stories)
+    - [Use cases](#use-cases)
+      - [Use Case: U1. View all Tutor Profile](#use-case-u1-view-all-tutor-profile)
+      - [Use Case: U2. View a specific Tutor Profile](#use-case-u2-view-a-specific-tutor-profile)
+      - [Use Case: U3. Delete a Tutor from Tuto](#use-case-u3-delete-a-tutor-from-tuto)
+      - [Use Case: U4. Add a Tutor Profile](#use-case-u4-add-a-tutor-profile)
+      - [Use Case: U5. Search for Tutors by Subject](#use-case-u5-search-for-tutors-by-subject)
+      - [Use Case: U6. Edit a Tutor Profile](#use-case-u6-edit-a-tutor-profile)
+    - [Non-Functional Requirements](#non-functional-requirements)
+    - [Glossary](#glossary)
+  - [**Appendix: Instructions for manual testing**](#appendix-instructions-for-manual-testing)
+    - [Launch and shutdown](#launch-and-shutdown)
+    - [Adding a person](#adding-a-person)
+    - [Deleting a person](#deleting-a-person)
+    - [Finding a person](#finding-a-person)
+      - [Negative Cases \& Error Handling](#negative-cases--error-handling)
+      - [Positive Cases (Universal Search)](#positive-cases-universal-search)
+      - [Complex Cases (Attribute Filtering \& Combinations)](#complex-cases-attribute-filtering--combinations)
+      - [Adversarial \& Edge Cases](#adversarial--edge-cases)
+    - [Sorting the tutor list](#sorting-the-tutor-list)
+      - [Invalid commands and errors](#invalid-commands-and-errors)
+    - [Saving data](#saving-data)
 
 ---
 
@@ -246,9 +246,7 @@ The sequence of interactions is as follows:
 5. `AddCommandParser` creates an `AddCommand` object containing the `Person`.
 6. The `AddCommand` is returned to `LogicManager`.
 7. `LogicManager` executes the command by calling `AddCommand#execute(Model)`.
-8. `AddCommand` performs validation checks:
-    - checks if the person already exists,
-    - checks if the same phone and email already exists.
+8. `AddCommand` performs validation checks if same phone and email already exists.
 9. If all checks pass, the `Person` is added to the `Model`.
 10. A `CommandResult` is created and returned to the user.
 
@@ -384,7 +382,7 @@ The `find` command supports three modalities of searching, enabling users to fin
 Users can provide keywords without any prefixes.
 
 - **Example:** `find alice math`
-- **Implementation:** The `FindCommandParser` treats these prefix-less keywords as the preamble. It extracts these keywords and constructs a `UniversalSearchPredicate`. This predicate evaluates if _any_ of the tutor's relevant fields (such as name, subject, or tags) match the specified keywords.
+- **Implementation:** The `FindCommandParser` treats these prefix-less keywords as the preamble. It extracts these keywords and constructs a `UniversalSearchPredicate`. This predicate evaluates if **any** of the tutor's relevant fields (such as name, subject, or tags) match the specified keywords.
 
 **2. Attribute Filtering**
 Users can search for specific attributes using prefixes (e.g., `n/`, `s/`, `r/`, `t/`).

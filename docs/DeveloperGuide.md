@@ -15,58 +15,57 @@ It is intended for future developers, maintainers, and anyone interested in unde
 
 ## Table of Contents
 
-- [Tuto Developer Guide](#tuto-developer-guide)
-  - [Table of Contents](#table-of-contents)
-  - **[Acknowledgements](#acknowledgements)**
-  - **[Setting up, getting started](#setting-up-getting-started)**
-  - **[Design](#design)**
-    - [Architecture](#architecture)
-    - [UI component](#ui-component)
-    - [Logic component](#logic-component)
-    - [Model component](#model-component)
-    - [Storage component](#storage-component)
-    - [Common classes](#common-classes)
-  - **[Implementation](#implementation)**
-    - [Adding a Tutor: `add](#adding-a-tutor-add)`
-      - [Alternative flows](#alternative-flows)
-    - [Uniqueness Constraints](#uniqueness-constraints)
-      - [Current Implementation](#current-implementation)
-      - [Design Considerations](#design-considerations)
-      - [Class Diagram](#class-diagram)
-      - [Sequence Diagram](#sequence-diagram)
-    - [Finding a Tutor: `find](#finding-a-tutor-find)`
-      - [Alternative flows](#alternative-flows-1)
-      - [Search Modalities](#search-modalities)
-      - [Design Considerations](#design-considerations-1)
-        - [Aspect: Search Modalities and User Experience](#aspect-search-modalities-and-user-experience)
-        - [Aspect: UI Context and the Query Bar](#aspect-ui-context-and-the-query-bar)
-  - **[Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)**
-  - **[Appendix: Requirements](#appendix-requirements)**
-    - [Product scope](#product-scope)
-    - [User stories](#user-stories)
-    - [Use cases](#use-cases)
-      - [Use Case: U1. View all Tutor Profile](#use-case-u1-view-all-tutor-profile)
-      - [Use Case: U2. Delete a Tutor from Tuto](#use-case-u2-delete-a-tutor-from-tuto)
-      - [Use Case: U3. Add a Tutor Profile](#use-case-u3-add-a-tutor-profile)
-      - [Use Case: U4. Search for Tutors by Subject](#use-case-u4-search-for-tutors-by-subject)
-      - [Use Case: U5. Edit a Tutor Profile](#use-case-u5-edit-a-tutor-profile)
-      - [Use Case: U6. Find Tutors](#use-case-u6-find-tutors)
-      - [Use Case: U7. Sort the Tutor List](#use-case-u7-sort-the-tutor-list)
-    - [Non-Functional Requirements](#non-functional-requirements)
-    - [Glossary](#glossary)
-  - **[Appendix: Instructions for manual testing](#appendix-instructions-for-manual-testing)**
-    - [Launch and shutdown](#launch-and-shutdown)
-    - [Adding a person](#adding-a-person)
-    - [Deleting a person](#deleting-a-person)
-    - [Editing a person](#editing-a-person)
-    - [Finding a person](#finding-a-person)
-      - [Negative Cases  Error Handling](#negative-cases--error-handling)
-      - [Positive Cases (Universal Search)](#positive-cases-universal-search)
-      - [Complex Cases (Attribute Filtering  Combinations)](#complex-cases-attribute-filtering--combinations)
-      - [Adversarial  Edge Cases](#adversarial--edge-cases)
-    - [Sorting the tutor list](#sorting-the-tutor-list)
-      - [Invalid commands and errors](#invalid-commands-and-errors)
-    - [Saving data](#saving-data)
+- [Table of Contents](#table-of-contents)
+- [**Acknowledgements**](#acknowledgements)
+- [**Setting up, getting started**](#setting-up-getting-started)
+- [**Design**](#design)
+  - [Architecture](#architecture)
+  - [UI component](#ui-component)
+  - [Logic component](#logic-component)
+  - [Model component](#model-component)
+  - [Storage component](#storage-component)
+  - [Common classes](#common-classes)
+- [**Implementation**](#implementation)
+  - [Adding a Tutor: `add`](#adding-a-tutor-add)
+    - [Alternative flows](#alternative-flows)
+  - [Uniqueness Constraints](#uniqueness-constraints)
+    - [Current Implementation](#current-implementation)
+    - [Design Considerations](#design-considerations)
+    - [Class Diagram](#class-diagram)
+    - [Sequence Diagram](#sequence-diagram)
+  - [Finding a Tutor: `find`](#finding-a-tutor-find)
+    - [Alternative flows](#alternative-flows-1)
+    - [Search Modalities](#search-modalities)
+    - [Design Considerations](#design-considerations-1)
+      - [Aspect: Search Modalities and User Experience](#aspect-search-modalities-and-user-experience)
+      - [Aspect: UI Context and the Query Bar](#aspect-ui-context-and-the-query-bar)
+- [**Documentation, logging, testing, configuration, dev-ops**](#documentation-logging-testing-configuration-dev-ops)
+- [**Appendix: Requirements**](#appendix-requirements)
+  - [Product scope](#product-scope)
+  - [User stories](#user-stories)
+  - [Use cases](#use-cases)
+    - [Use Case: U1. View all Tutor Profile](#use-case-u1-view-all-tutor-profile)
+    - [Use Case: U2. Delete a Tutor from Tuto](#use-case-u2-delete-a-tutor-from-tuto)
+    - [Use Case: U3. Add a Tutor Profile](#use-case-u3-add-a-tutor-profile)
+    - [Use Case: U4. Search for Tutors by Subject](#use-case-u4-search-for-tutors-by-subject)
+    - [Use Case: U5. Edit a Tutor Profile](#use-case-u5-edit-a-tutor-profile)
+    - [Use Case: U6. Find Tutors](#use-case-u6-find-tutors)
+    - [Use Case: U7. Sort the Tutor List](#use-case-u7-sort-the-tutor-list)
+  - [Non-Functional Requirements](#non-functional-requirements)
+  - [Glossary](#glossary)
+- [**Appendix: Instructions for manual testing**](#appendix-instructions-for-manual-testing)
+  - [Launch and shutdown](#launch-and-shutdown)
+  - [Adding a person](#adding-a-person)
+  - [Deleting a person](#deleting-a-person)
+  - [Editing a person](#editing-a-person)
+  - [Finding a person](#finding-a-person)
+    - [Negative Cases \& Error Handling](#negative-cases--error-handling)
+    - [Positive Cases (Universal Search)](#positive-cases-universal-search)
+    - [Complex Cases (Attribute Filtering \& Combinations)](#complex-cases-attribute-filtering--combinations)
+    - [Adversarial \& Edge Cases](#adversarial--edge-cases)
+  - [Sorting the tutor list](#sorting-the-tutor-list)
+    - [Invalid commands and errors](#invalid-commands-and-errors)
+  - [Saving data](#saving-data)
 
 ---
 
@@ -634,9 +633,9 @@ Guarantees: If MSS completes until step 3, `Tuto` reorders the currently display
 - **Index**: The number displayed next to a tutor's name in the contact list (e.g., the 3 in 3. John Doe). Used to select a specific tutor for commands like edit or delete.
 - **JAR File**: The file format used to distribute Tuto, allowing it to run on any computer with Java installed without a setup wizard.
 - **Model**: The component responsible for storing and managing application data.
-- **Parameter**: The specific information provided after a Flag (e.g., John is the parameter for `n/`).
+- **Parameter**: The specific information provided after a Flag (e.g., John is the parameter for n/).
 - **Person**: A data entity representing a tutor profile, containing attributes such as name, phone, email, address, subject, rate and tags.
-- **Prefix**: A specific prefix (e.g., `n/`, `p/`, `e/`) used to identify the type of data following it.
+- **Prefix**: A specific prefix (e.g., n/, p/, e/) used to identify the type of data following it.
 - **Rate**: The cost per hour for hiring the tutor.
 - **Subject**: The academic discipline a tutor teaches (e.g., Math, Physics).
 - **Tag**: A customisable label user can put on a tutor profile.
@@ -664,66 +663,80 @@ testers are expected to do more *exploratory* testing.
 ### Adding a person
 
 1. Adding a person with all fields given
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/60 t/friend`
-    Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
-2. Adding a person with no fields given
-  1. Test case: `add`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-3. Adding a person with any of the mandatory fields (e.g. name, phone number, email, subject, rate) missing
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add p/91234567 e/jane@example.com s/Mathematics r/60`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-  3. Test case: `add n/Jane Smith e/jane@example.com s/Mathematics r/60`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-  4. Test case: `add n/Jane Smith p/91234567 s/Mathematics r/60`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-  5. Test case: `add n/Jane Smith p/91234567 e/jane@example.com r/60`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-  6. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics`
-    Expected: No person is added. An error message that displays the correct command format and an example is shown
-4. Adding a person with any/all optional fields missing
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics r/60 t/friend`
-    Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
-  3. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics r/60`
-    Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
-  4. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/60`
-    Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
-5. Adding a person with multiple subjects:
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
-6. Adding a person with multiple values specified for the same field:
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith n/jon p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that multiple values have been specified for the field `n/`
-  3. Test case: `add n/Jane Smith p/91234567 p/98765443 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that multiple values have been specified for the field `p/`
-  4. Test case: `add n/Jane Smith p/91234567 e/jane@example.com e/jon@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that multiple values have been specified for the field `e/`
-  5. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street a/Clementi 7th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that multiple values have been specified for the field `a/`
-  6. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 r/70 t/friend`
-    Expected: No person is added. An error message indicating that multiple values have been specified for the field `r/`
-7. Adding a person with inappropriate value for `phone number` field:
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith p/91s34567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that phone number can only contain numbers and should be at least 3 digits long is shown
-  3. Test case: `add n/Jane Smith p/91 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`
-    Expected: No person is added. An error message indicating that phone number can only contain numbers and should be at least 3 digits long is shown
-8. Adding a person with inappropriate value for `rate` field:
-  1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and email address `jane@example.com`
-    Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
-  2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/s t/friend`
-    Expected: No person is added. An error message indicating that rates can only contain numbers is shown
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/60 t/friend`<br>
+       Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
 
+2. Adding a person with no fields given
+    1. Test case: `add`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+
+3. Adding a person with any of the mandatory fields (e.g. name, phone number, email, subject, rate) missing
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add p/91234567 e/jane@example.com s/Mathematics r/60`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+    3. Test case: `add n/Jane Smith e/jane@example.com s/Mathematics r/60`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+    4. Test case: `add n/Jane Smith p/91234567 s/Mathematics r/60`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+    5. Test case: `add n/Jane Smith p/91234567 e/jane@example.com r/60`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+    6. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics`<br>
+       Expected: No person is added. An error message that displays the correct command format and an example is shown
+
+4. Adding a person with any/all optional fields missing
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics r/60 t/friend`<br>
+       Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
+    3. Test case: `add n/Jane Smith p/91234567 e/jane@example.com s/Mathematics r/60`<br>
+       Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
+    4. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/60`<br>
+       Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
+
+5. Adding a person with multiple subjects:
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: A card displaying the newly added tutor details is displayed and the profile is added to list of tutor profiles
+
+6. Adding a person with multiple values specified for the same field:
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith n/jon p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that multiple values have been specified for the field `n/`
+    3. Test case: `add n/Jane Smith p/91234567 p/98765443 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that multiple values have been specified for the field `p/`
+    4. Test case: `add n/Jane Smith p/91234567 e/jane@example.com e/jon@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that multiple values have been specified for the field `e/`
+    5. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street a/Clementi 7th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that multiple values have been specified for the field `a/`
+    6. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 r/70 t/friend`<br>
+       Expected: No person is added. An error message indicating that multiple values have been specified for the field `r/`
+
+7. Adding a person with inappropriate value for `phone number` field:
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and/or email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith p/91s34567 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that phone number can only contain numbers and should be at least 3 digits long is shown
+    3. Test case: `add n/Jane Smith p/91 e/jane@example.com a/Clementi 6th Street s/Mathematics s/Korean r/60 t/friend`<br>
+       Expected: No person is added. An error message indicating that phone number can only contain numbers and should be at least 3 digits long is shown
+
+8. Adding a person with inappropriate value for `rate` field:
+    1. Prerequisites: No person in the list of tutor profiles has the contact number `91234567` and email address `jane@example.com`
+       Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
+    2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/s t/friend`<br>
+       Expected: No person is added. An error message indicating that rates can only contain numbers is shown 
+
+9. Adding a person with duplicate phone or email
+    1. Prerequisites: A person with phone number `91234567` already exists in the list, and a person with email `jane@example.com` already exists in the list.
+    2. Test case: `add n/John Doe p/91234567 e/john@example.com s/Math r/50`<br>
+       Expected: No person is added. An error message indicating that a tutor with that phone number already exists is shown.
+    3. Test case: `add n/John Doe p/98765432 e/jane@example.com s/Math r/50`<br>
+       Expected: No person is added. An error message indicating that a tutor with that email already exists is shown.
+   
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown

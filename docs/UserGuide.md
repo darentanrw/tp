@@ -34,27 +34,15 @@ This guide is written for parents who are comfortable using a keyboard and want 
   - [Commands](#commands)
     - [Viewing Help : `help`](#viewing-help--help)
     - [Adding a Tutor : `add`](#adding-a-tutor--add)
-      - [Parameters](#parameters)
-      - [Constraints](#constraints)
-      - [Examples](#examples)
     - [Editing a Tutor Profile : `edit`](#editing-a-tutor-profile--edit)
-      - [Parameters](#parameters-1)
-      - [Constraints](#constraints-1)
-      - [Examples](#examples-1)
-      - [Invalid Usage](#invalid-usage)
     - [Deleting a Tutor : `delete`](#deleting-a-tutor--delete)
-      - [Parameters](#parameters-2)
-      - [Examples](#examples-2)
     - [Finding Tutors : `find`](#finding-tutors--find)
       - [Prefixes](#prefixes)
       - [Search Modes](#search-modes)
       - [How Matching Works](#how-matching-works)
-      - [Examples](#examples-3)
-      - [Invalid Usage](#invalid-usage-1)
+      - [Examples](#examples)
+      - [Invalid Usage](#invalid-usage)
     - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list--sort)
-      - [Parameters](#parameters-3)
-      - [Examples](#examples-4)
-      - [Invalid Usage](#invalid-usage-2)
     - [Listing All Tutors : `list`](#listing-all-tutors--list)
     - [Clearing All Entries : `clear`](#clearing-all-entries--clear)
     - [Exiting the Program : `exit`](#exiting-the-program--exit)
@@ -238,7 +226,7 @@ Adds a new Tutor Profile to Tuto.
 | `p/`   | Phone number      | Yes      | Digits only, at least 3 digits                                      |
 | `e/`   | Email             | Yes      | Valid email format (e.g. `user@example.com`)                        |
 | `s/`   | Subject           | Yes      | Alphanumeric text + spaces (e.g. `Advanced Mathematics`, `Biology`) |
-| `r/`   | Hourly rate (SGD) | Yes      | Positive integer value (including zero)                             |
+| `r/`   | Hourly rate (SGD) | Yes      | 0 or any positive integer                                           |
 | `a/`   | Address           | No       | Any text                                                            |
 | `t/`   | Tag               | No       | Alphanumeric text, no spaces                                        |
 
@@ -328,9 +316,9 @@ Updates one or more fields of an existing Tutor Profile.
 edit 3 e/ qingrong@example.com t/ best
 ```
 
-Updates the phone number and email of the 3rd tutor in the list.
+Updates the email and tags of the 3rd tutor in the list.
 
-**Replacing tags**
+**Removing tags**
 
 ```
 edit 2 t/

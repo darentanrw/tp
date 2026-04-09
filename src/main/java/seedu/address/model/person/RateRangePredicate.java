@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import java.math.BigInteger;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -8,22 +9,22 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests that a {@code Person}'s {@code Rate} is within the given inclusive range.
  */
 public class RateRangePredicate implements Predicate<Person> {
-    private final int lowerBound;
-    private final int upperBound;
+    private final BigInteger lowerBound;
+    private final BigInteger upperBound;
 
     /**
      * Creates a predicate that checks whether a person's rate is between
      * {@code lowerBound} and {@code upperBound}, inclusive.
      */
-    public RateRangePredicate(int lowerBound, int upperBound) {
+    public RateRangePredicate(BigInteger lowerBound, BigInteger upperBound) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
 
     @Override
     public boolean test(Person person) {
-        int personRate = Integer.parseInt(person.getRate().toString());
-        return personRate >= lowerBound && personRate <= upperBound;
+        Rate rate = person.getRate();
+        return rate.compareNumericValueTo(lowerBound) >= 0 && rate.compareNumericValueTo(upperBound) <= 0;
     }
 
     @Override
@@ -37,8 +38,8 @@ public class RateRangePredicate implements Predicate<Person> {
         }
 
         RateRangePredicate otherPredicate = (RateRangePredicate) other;
-        return lowerBound == otherPredicate.lowerBound
-                && upperBound == otherPredicate.upperBound;
+        return lowerBound.equals(otherPredicate.lowerBound)
+                && upperBound.equals(otherPredicate.upperBound);
     }
 
     @Override

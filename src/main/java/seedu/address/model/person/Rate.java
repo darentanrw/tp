@@ -3,6 +3,8 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.math.BigInteger;
+
 /**
  * Represents a Person's rate in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidRate(String)}
@@ -47,14 +49,24 @@ public class Rate {
     public Rate(String rate) {
         requireNonNull(rate);
         checkArgument(isValidRate(rate), MESSAGE_CONSTRAINTS);
-        this.rate = String.valueOf(Integer.parseInt(rate));
+        this.rate = new BigInteger(rate).toString();
     }
 
     /**
-     * Returns true if a given string is a valid rate.
+     * Returns true if a given string is a valid rate (non-empty digit sequence).
      */
     public static boolean isValidRate(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test != null && test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Compares this rate's numeric value with {@code other}.
+     *
+     * @return a negative integer, zero, or a positive integer as this value is numerically less than, equal to,
+     *         or greater than {@code other}
+     */
+    public int compareNumericValueTo(BigInteger other) {
+        return new BigInteger(rate).compareTo(other);
     }
 
     @Override

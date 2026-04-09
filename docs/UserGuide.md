@@ -20,38 +20,50 @@ This guide is written for parents who are comfortable using a keyboard and want 
 ## Table of Contents
 
 - [Tuto User Guide](#tuto-user-guide)
-  - [Table of Contents](#table-of-contents)
-  - [Quick Start](#quick-start)
-    - [Step 1 — Install Java](#step-1--install-java)
-    - [Step 2 — Download Tuto](#step-2--download-tuto)
-    - [Step 3 — Launch Tuto](#step-3--launch-tuto)
-    - [Step 4 — Try Your First Commands](#step-4--try-your-first-commands)
-  - [Understanding the Interface](#understanding-the-interface)
-  - [Command Basics](#command-basics)
-    - [Notes on Command Format](#notes-on-command-format)
-    - [Understanding List Indices](#understanding-list-indices)
-    - [Duplicate Tutors are Not Allowed](#duplicate-tutors-are-not-allowed)
-  - [Commands](#commands)
-    - [Viewing Help : `help`](#viewing-help-help)
-    - [Adding a Tutor : `add`](#adding-a-tutor-add)
-    - [Editing a Tutor Profile : `edit`](#editing-a-tutor-profile-edit)
-    - [Deleting a Tutor : `delete`](#deleting-a-tutor-delete)
-    - [Finding Tutors : `find`](#finding-tutors-find)
-      - [Prefixes](#prefixes)
-      - [Search Modes](#search-modes)
-      - [How Matching Works](#how-matching-works)
-      - [Examples](#examples)````
-      - [Invalid Usage](#invalid-usage)
-    - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list-sort)
-    - [Listing All Tutors : `list`](#listing-all-tutors-list)
-    - [Clearing All Entries : `clear`](#clearing-all-entries-clear)
-    - [Exiting the Program : `exit`](#exiting-the-program-exit)
-  - [Data Management](#data-management)
-    - [Saving Your Data](#saving-your-data)
-    - [Editing the Data File Directly](#editing-the-data-file-directly)
-  - [FAQ](#faq)
-  - [Known Issues](#known-issues)
-  - [Command Summary](#command-summary)
+    - [Table of Contents](#table-of-contents)
+    - [Quick Start](#quick-start)
+        - [Step 1 — Install Java](#step-1--install-java)
+        - [Step 2 — Download Tuto](#step-2--download-tuto)
+        - [Step 3 — Launch Tuto](#step-3--launch-tuto)
+        - [Step 4 — Try Your First Commands](#step-4--try-your-first-commands)
+    - [Understanding the Interface](#understanding-the-interface)
+    - [Command Basics](#command-basics)
+        - [Notes on Command Format](#notes-on-command-format)
+        - [Understanding List Indices](#understanding-list-indices)
+        - [Duplicate Tutors are Not Allowed](#duplicate-tutors-are-not-allowed)
+    - [Commands](#commands)
+        - [Viewing Help : `help`](#viewing-help--help)
+        - [Adding a Tutor : `add`](#adding-a-tutor--add)
+            - [Parameters](#parameters)
+            - [Constraints](#constraints)
+            - [Examples](#examples)
+        - [Editing a Tutor Profile : `edit`](#editing-a-tutor-profile--edit)
+            - [Parameters](#parameters-1)
+            - [Constraints](#constraints-1)
+            - [Examples](#examples-1)
+            - [Invalid Usage](#invalid-usage)
+        - [Deleting a Tutor : `delete`](#deleting-a-tutor--delete)
+            - [Parameters](#parameters-2)
+            - [Examples](#examples-2)
+        - [Finding Tutors : `find`](#finding-tutors--find)
+            - [Prefixes](#prefixes)
+            - [Search Modes](#search-modes)
+            - [How Matching Works](#how-matching-works)
+            - [Examples](#examples-3)
+            - [Invalid Usage](#invalid-usage-1)
+        - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list--sort)
+            - [Parameters](#parameters-3)
+            - [Examples](#examples-4)
+            - [Invalid Usage](#invalid-usage-2)
+        - [Listing All Tutors : `list`](#listing-all-tutors--list)
+        - [Clearing All Entries : `clear`](#clearing-all-entries--clear)
+        - [Exiting the Program : `exit`](#exiting-the-program--exit)
+    - [Data Management](#data-management)
+        - [Saving Your Data](#saving-your-data)
+        - [Editing the Data File Directly](#editing-the-data-file-directly)
+    - [FAQ](#faq)
+    - [Known Issues](#known-issues)
+    - [Command Summary](#command-summary)
 
 ---
 
@@ -121,7 +133,6 @@ Type a command into the **Command Box** at the bottom and press **Enter** to run
 ## Understanding the Interface
 
 ![Annotated UI](images/user_interface_anno.png)
-
 
 Tuto's interface has three main areas:
 
@@ -221,15 +232,15 @@ Adds a new Tutor Profile to Tuto.
 
 #### Parameters
 
-| Prefix | Field             | Required | Accepted values                                                         |
-| ------ | ----------------- | -------- | ----------------------------------------------------------------------- |
-| `n/`   | Name              | Yes      | Alphanumeric text + spaces                                              |
-| `p/`   | Phone number      | Yes      | Digits only, at least 3 digits                                          |
-| `e/`   | Email             | Yes      | Valid email format (e.g. `user@example.com`)                            |
-| `s/`   | Subject           | Yes      | Alphanumeric text + spaces (e.g. `Advanced Mathematics`, `Biology`)     |
-| `r/`   | Hourly rate (SGD) | Yes      | Positive integer value (including zero)                                 |
-| `a/`   | Address           | No       | Any text                                                                |
-| `t/`   | Tag               | No       | Alphanumeric text, no spaces                                            |
+| Prefix | Field             | Required | Accepted values                                                     |
+| ------ | ----------------- | -------- | ------------------------------------------------------------------- |
+| `n/`   | Name              | Yes      | Alphanumeric text + spaces                                          |
+| `p/`   | Phone number      | Yes      | Digits only, at least 3 digits                                      |
+| `e/`   | Email             | Yes      | Valid email format (e.g. `user@example.com`)                        |
+| `s/`   | Subject           | Yes      | Alphanumeric text + spaces (e.g. `Advanced Mathematics`, `Biology`) |
+| `r/`   | Hourly rate (SGD) | Yes      | Positive integer value (including zero)                             |
+| `a/`   | Address           | No       | Any text                                                            |
+| `t/`   | Tag               | No       | Alphanumeric text, no spaces                                        |
 
 <box type="tip" seamless>
 
@@ -260,6 +271,7 @@ Tuto natively handles duplicates to secure your data. See [Duplicate Tutors are 
 ```
 add n/ elizabeth chang p/ 82516782 e/ elizabeth@example.com s/ piano r/ 76
 ```
+
 ![add minimum required](images/add_min_req.png)
 
 ---
@@ -267,7 +279,7 @@ add n/ elizabeth chang p/ 82516782 e/ elizabeth@example.com s/ piano r/ 76
 **Adding with optional fields (address and tags)**
 
 ```
-add n/ gabrielle chee p/ 87429246 e/ gabrielle@example.com s/ computing r/ 85 a/ 8 napier road t/ prodigy  
+add n/ gabrielle chee p/ 87429246 e/ gabrielle@example.com s/ computing r/ 85 a/ 8 napier road t/ prodigy
 ```
 
 ![add optionals](images/add_optional.png)
@@ -453,6 +465,8 @@ Search for tutors by keyword, name, subject, or hourly rate — or combine them 
 | Above  | `r/>RATE`       | Tutors charging more than `RATE`                        |
 | Below  | `r/<RATE`       | Tutors charging less than `RATE`                        |
 
+In every `r/` field above, each numeric token (`RATE`, `RATE1`, `RATE2`) must be **non-negative** (integers only; no negative numbers). For ranges, `RATE1` must also be less than or equal to `RATE2`.
+
 **Mixed prefixes** — all conditions must be met
 
 - `find n/Alex r/40 s/Math` → named "Alex…", rate $40, teaches Math
@@ -545,8 +559,8 @@ Matching tutors appear in the right panel. If no matches are found:
 
 Only **one** `n/` and one `r/` are allowed per command.
 
-| ❌ Invalid            | Reason                            |
-|----------------------|-----------------------------------|
+| ❌ Invalid           | Reason                            |
+| -------------------- | --------------------------------- |
 | `find r/16 r/17`     | Multiple `r/` not allowed         |
 | `find n/Alice n/Bob` | Multiple `n/` not allowed         |
 | `find`               | Keywords and/or Prefixes required |
@@ -558,8 +572,6 @@ Only **one** `n/` and one `r/` are allowed per command.
 ![Invalid Names](images/find_invalid_name.png)
 
 ![Invalid Command](images/find_generic_error.png)
-
-
 
 ---
 
@@ -622,7 +634,6 @@ Shows highest hourly rate first.
 ![Sort error output](images/sort_error.png)
 
 ![Sort error output](images/sort_no_param.png)
-
 
 ---
 
@@ -729,7 +740,7 @@ A: The Help Window may be minimised. Check your taskbar and restore it manually.
 ## Command Summary
 
 | Action     | Format                                                                                                | Example                                                                                                           |
-|------------|-------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| ---------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | **Help**   | `help`                                                                                                | `help`                                                                                                            |
 | **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL s/SUBJECT1 s/SUBJECT2 ... s/SUBJECTn r/RATE [a/ADDRESS] [t/TAG]…​` | `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 s/Biology r/45 t/friend t/colleague` |
 | **Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT] [r/RATE] [t/TAG]…`                   | `edit 2 n/James Lee e/james@example.com`                                                                          |

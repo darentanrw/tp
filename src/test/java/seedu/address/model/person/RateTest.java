@@ -41,7 +41,7 @@ public class RateTest {
     @Test
     public void isValidRate() {
         // null rate
-        assertThrows(NullPointerException.class, () -> Rate.isValidRate(null));
+        assertFalse(Rate.isValidRate(null));
 
         // valid rate
         assertFalse(Rate.isValidRate("")); //Empty
@@ -56,6 +56,16 @@ public class RateTest {
         assertTrue(Rate.isValidRate("10"));
         assertTrue(Rate.isValidRate("0"));
         assertTrue(Rate.isValidRate("00000000007"));
+        assertTrue(Rate.isValidRate(String.valueOf(Integer.MAX_VALUE)));
+        assertTrue(Rate.isValidRate("2147483648"));
+        assertTrue(Rate.isValidRate("999999999999999999999999"));
+    }
+
+    @Test
+    public void constructor_veryLargeDigitString_normalizesWithBigInteger() {
+        Rate rate = new Rate("2147483648");
+        assertTrue(rate.toString().equals("2147483648"));
+        assertTrue(rate.equals(new Rate("000002147483648")));
     }
 
     @Test

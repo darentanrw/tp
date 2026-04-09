@@ -1,5 +1,6 @@
 package seedu.address.model.person;
 
+import java.math.BigInteger;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
@@ -8,16 +9,15 @@ import seedu.address.commons.util.ToStringBuilder;
  * Tests that a {@code Person}'s {@code Rate} is less than the given value.
  */
 public class RateLessThanPredicate implements Predicate<Person> {
-    private final int upperBound;
+    private final BigInteger upperBound;
 
-    public RateLessThanPredicate(int upperBound) {
+    public RateLessThanPredicate(BigInteger upperBound) {
         this.upperBound = upperBound;
     }
 
     @Override
     public boolean test(Person person) {
-        int personRate = Integer.parseInt(person.getRate().toString());
-        return personRate < upperBound;
+        return person.getRate().compareNumericValueTo(upperBound) < 0;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class RateLessThanPredicate implements Predicate<Person> {
         }
 
         RateLessThanPredicate otherPredicate = (RateLessThanPredicate) other;
-        return upperBound == otherPredicate.upperBound;
+        return upperBound.equals(otherPredicate.upperBound);
     }
 
     @Override

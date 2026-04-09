@@ -16,26 +16,28 @@ import seedu.address.commons.core.LogsCenter;
 public class HelpWindow extends UiPart<Stage> {
 
     public static final String USERGUIDE_URL = "https://ay2526s2-cs2103t-t15-3.github.io/tp/UserGuide.html";
-    public static final String HELP_MESSAGE = "For more detailed instructions, refer to the user guide: "
+    public static final String HELP_MESSAGE = "For more detailed instructions, refer to the user guide at: "
             + USERGUIDE_URL + "\n\n"
-            + "Available Commands:\n"
-            + "• help        : Shows this window\n"
-            + "• clear       : Clears all tutors\n"
-            + "• add         : Adds a tutor (e.g. add n/John p/91234567 e/j@o.com s/Math r/50 [a/ADDR] [t/TAG])\n"
-            + "• list           : Shows all tutors\n"
-            + "• sort        : Sorts tutors by name or rate (e.g. sort rate asc)\n"
-            + "• edit        : Edits an existing tutor (e.g. edit 1 p/98765432)\n"
-            + "• find        : Finds tutors by keywords (e.g. find n/John r/50)\n"
-            + "• delete   : Deletes a tutor (e.g. delete 1)\n"
-            + "• exit         : Closes Tuto\n\n"
-            + "Some Important Constraints:\n"
-            + "• Names should only contain alphanumeric characters and spaces.\n"
-            + "• Phone numbers should only contain numbers, and it should be at least 3 digits long.\n"
-            + "• Emails should be of the format local-part@domain and adhere to standard constraints.\n"
-            + "• Addresses can take any values.\n"
-            + "• Rates should only contain numbers, and it should not be blank.\n"
-            + "• Subjects should only contain alphanumeric characters and spaces, and it should not be blank.\n"
-            + "• Tag names should be alphanumeric.";
+            + """
+            Available Commands:
+            • help        : Shows this window
+            • add         : Adds a tutor contact (e.g. add n/John p/91234567 e/j@o.com s/Math r/50 [a/ADDRESS] [t/TAG])
+            • edit        : Edits an existing tutor contact (e.g. edit 1 p/98765432)
+            • delete      : Deletes a tutor contact (e.g. delete 1)
+            • find        : Finds tutors by keywords (e.g. find n/John r/50)
+            • sort        : Sorts tutors by name or rate (e.g. sort rate asc)
+            • list        : Shows all tutors
+            • clear       : Clears all tutor contacts
+            • exit        : Closes Tuto
+
+            Some Important Constraints:
+            • Names should only contain alphanumeric characters and spaces.
+            • Phone numbers should only contain numbers, and it should be at least 3 digits long.
+            • Emails should be of the format local-part@domain and adhere to standard constraints.
+            • Addresses can take any values.
+            • Rates should only contain numbers, and it should not be blank.
+            • Subjects should only contain alphanumeric characters and spaces, and it should not be blank.
+            • Tag names should be alphanumeric.""";
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";

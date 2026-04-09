@@ -23,6 +23,8 @@ public class CommandBox extends UiPart<Region> {
     private static final double MAX_HEIGHT = 350.0;
     private static final double HEIGHT_PADDING_BUFFER = 50.0;
     private static final double WIDTH_PADDING_BUFFER = 60.0;
+    private static final double LINE_HEIGHT_MULTIPLIER = 1.9;
+    private static final String SINGLE_LINE_SAMPLE_TEXT = "A";
 
     private final CommandExecutor commandExecutor;
 
@@ -92,14 +94,40 @@ public class CommandBox extends UiPart<Region> {
     private double computeContentHeight(double width) {
         String content = getFormattedTextContent();
 
+        double textHeight = computeTextHeight(content, width);
+        double singleLineHeight = computeSingleLineHeight();
+
+        double numberOfLines = Math.round(textHeight / singleLineHeight);
+        double computedHeight = computeTotalHeight(numberOfLines, singleLineHeight);
+
+        return Math.max(computedHeight, MIN_HEIGHT);
+    }
+
+    /**
+     * Computes the layout height of the given text content within the specified width.
+     */
+    private double computeTextHeight(String content, double width) {
         Text text = new Text(content);
         text.setFont(commandTextField.getFont());
         text.setWrappingWidth(width - WIDTH_PADDING_BUFFER);
+        return text.getLayoutBounds().getHeight();
+    }
 
-        double height = text.getLayoutBounds().getHeight();
-        double computedHeight = Math.ceil(height + HEIGHT_PADDING_BUFFER);
+    /**
+     * Computes the height of a single line of text.
+     */
+    private double computeSingleLineHeight() {
+        Text singleLineText = new Text(SINGLE_LINE_SAMPLE_TEXT);
+        singleLineText.setFont(commandTextField.getFont());
+        return singleLineText.getLayoutBounds().getHeight();
+    }
 
-        return Math.max(computedHeight, MIN_HEIGHT);
+    /**
+     * Computes the total height of the command box based on the number of lines.
+     */
+    private double computeTotalHeight(double numberOfLines, double singleLineHeight) {
+        double heightPerLine = singleLineHeight * LINE_HEIGHT_MULTIPLIER;
+        return (numberOfLines * heightPerLine) + HEIGHT_PADDING_BUFFER;
     }
 
     /**

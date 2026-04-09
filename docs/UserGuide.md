@@ -27,22 +27,38 @@ This guide is written for parents who are comfortable using a keyboard and want 
     - [Step 3 — Launch Tuto](#step-3--launch-tuto)
     - [Step 4 — Try Your First Commands](#step-4--try-your-first-commands)
   - [Understanding the Interface](#understanding-the-interface)
-  - [Features](#features)
+  - [Command Basics](#command-basics)
     - [Notes on Command Format](#notes-on-command-format)
-    - [Viewing Help `help`](#viewing-help--help)
-    - [Clearing all entries: `clear`](#clearing-all-entries-clear)
+    - [Understanding List Indices](#understanding-list-indices)
+    - [Duplicate Tutors are Not Allowed](#duplicate-tutors-are-not-allowed)
+  - [Commands](#commands)
+    - [Viewing Help : `help`](#viewing-help--help)
     - [Adding a Tutor : `add`](#adding-a-tutor--add)
-    - [Listing All Tutors : `list`](#listing-all-tutors--list)
-    - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list--sort)
+      - [Parameters](#parameters)
+      - [Constraints](#constraints)
+      - [Examples](#examples)
     - [Editing a Tutor Profile : `edit`](#editing-a-tutor-profile--edit)
+      - [Parameters](#parameters-1)
+      - [Constraints](#constraints-1)
+      - [Examples](#examples-1)
+      - [Invalid Usage](#invalid-usage)
+    - [Deleting a Tutor : `delete`](#deleting-a-tutor--delete)
+      - [Parameters](#parameters-2)
+      - [Examples](#examples-2)
     - [Finding Tutors : `find`](#finding-tutors--find)
       - [Prefixes](#prefixes)
       - [Search Modes](#search-modes)
       - [How Matching Works](#how-matching-works)
-      - [Examples](#examples)
-      - [Invalid Usage](#invalid-usage)
-    - [Deleting a Tutor : `delete`](#deleting-a-tutor--delete)
+      - [Examples](#examples-3)
+      - [Invalid Usage](#invalid-usage-1)
+    - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list--sort)
+      - [Parameters](#parameters-3)
+      - [Examples](#examples-4)
+      - [Invalid Usage](#invalid-usage-2)
+    - [Listing All Tutors : `list`](#listing-all-tutors--list)
+    - [Clearing All Entries : `clear`](#clearing-all-entries--clear)
     - [Exiting the Program : `exit`](#exiting-the-program--exit)
+  - [Data Management](#data-management)
     - [Saving Your Data](#saving-your-data)
     - [Editing the Data File Directly](#editing-the-data-file-directly)
   - [FAQ](#faq)
@@ -88,9 +104,9 @@ Move the file into a dedicated folder (e.g. `~/tuto/`). This folder will store y
     java -jar tuto.jar
     ```
 
-A window similar to the one below should appear within a few seconds, pre-loaded with sample tutor data.
+A window similar to the one below should appear within a few seconds.
 
-![Tuto UI on first launch](images/Ui.png)
+![Tuto UI on first launch](images/empty_UI.png)
 
 ### Step 4 — Try Your First Commands
 
@@ -116,17 +132,19 @@ Type a command into the **Command Box** at the bottom and press **Enter** to run
 
 ## Understanding the Interface
 
+![Annotated UI](images/user_interface_anno.png)
+
 Tuto's interface has three main areas:
 
-- **Command Box** — where you type your commands
-- **Result Display** — shows feedback after each command (success messages or error details)
-- **Tutor List Panel** — displays all tutor profiles matching the current view
+- **Tutor List Panel (Left)** — shows all Tutor Profiles saved
+- **Result Display (Top Right)** — shows feedback after each command (success or error messages, records retrieved searching)
+- **Command Box (Bottom Right)** — where you type your commands
 
 Each tutor card in the panel shows the tutor's name, phone number, email, subject, and hourly rate. Tags (if any) appear as labels on the card.
 
 ---
 
-## Features
+## Command Basics
 
 ### Notes on Command Format
 
@@ -157,212 +175,170 @@ The following conventions apply to all commands in this guide:
 
 </box>
 
+---
+
+### Understanding List Indices
+
+Commands such as `edit` and `delete` use **`INDEX`**: the number shown beside each tutor in the **Tutor List Panel** for the **current** list order.
+
 <box type="warning" seamless>
 
 **Displayed indices change after `sort` and `delete`**
 
-Commands such as `edit` and `delete` use **`INDEX`**: the number shown beside each tutor in the **Tutor List Panel** for the **current** list order.
-
 - After a **`sort`** command, tutors are reordered, so the same person may appear at a **different** index than before.
 - After a **`delete`** command, the list becomes shorter and tutors below the removed row **shift up**, so their indices are **renumbered** (what was “tutor 5” may become “tutor 4”).
 
-**Always look at the Tutor List Panel again** before typing the next `edit` or `delete` command. Do not assume indices from an earlier step are still correct.
+**Always search with Find or look at the Tutor List Panel again** before typing the next `edit` or `delete` command. Do not assume indices from an earlier step are still correct.
 
 </box>
 
 ---
 
+### Duplicate Tutors are Not Allowed
+
+Tuto considers a Tutor Profile to be a duplicate if it shares the exact same **Phone number** or **Email** as an existing tutor. Both during `add` and `edit` operations, Tuto protects your data by rejecting the command if it detects a clash.
+
+<box type="warning" seamless>
+
+**Duplicate Error:** Neither adding a new tutor nor editing an existing one is permitted if it would resolve in two Tutor Profiles having the same phone number or email address.
+
+</box>
+
+---
+
+## Commands
+
 ### Viewing Help : `help`
 
-Opens a link to this User Guide.
+Displays a summary of available commands and their accepted parameter values.
 
 **Format:** `help`
 
-**Expected output:** A pop-up window appears with a button to copy the online User Guide URL.
+**Expected output:** A help window opens containing command syntax, constraints, and a link to the User Guide. The result display shows `✨  Opened help window.`
 
 ![Help window](images/helpMessage.png)
 
 ---
 
-### Clearing all entries: `clear`
-
-Clears all entries from Tuto.
-
-![clear message](images/clearMessage.png)
-
-Format: `clear`
-
----
-
 ### Adding a Tutor : `add`
 
-Adds a new tutor profile to Tuto.
+Adds a new Tutor Profile to Tuto.
 
 ![add message](images/addMessage.png)
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL s/SUBJECT1 s/SUBJECT2 ... s/SUBJECTn r/RATE [a/ADDRESS] [t/TAG]…​`
+**Format:** `add n/NAME p/PHONE_NUMBER e/EMAIL s/SUBJECT1 [s/SUBJECT2]... r/RATE [a/ADDRESS] [t/TAG]…`
 
-| Flag | Field             | Required? | Accepted values                                                         |
-| ---- | ----------------- | --------- | ----------------------------------------------------------------------- |
-| `n/` | Name              | Yes       | Only Alphnumeric Text + Spaces                                          |
-| `p/` | Phone number      | Yes       | Digits only, at least 3 digits                                          |
-| `e/` | Email             | Yes       | Valid email format (e.g. `user@example.com`)                            |
-| `a/` | Address           | No        | Any text                                                                |
-| `s/` | Subject           | Yes       | Only Alphnumeric Text + Spaces (e.g. `Advanced Mathematics`, `Biology`) |
-| `r/` | Hourly rate (SGD) | Yes       | Positive Integer Value (Including Zero)                                 |
-| `t/` | Tag               | No        | Alphanumeric, no spaces                                                 |
+---
+
+#### Parameters
+
+| Prefix | Field             | Required | Accepted values                                                     |
+| ------ | ----------------- | -------- | ------------------------------------------------------------------- |
+| `n/`   | Name              | Yes      | Alphanumeric text + spaces                                          |
+| `p/`   | Phone number      | Yes      | Digits only, at least 3 digits                                      |
+| `e/`   | Email             | Yes      | Valid email format (e.g. `user@example.com`)                        |
+| `s/`   | Subject           | Yes      | Alphanumeric text + spaces (e.g. `Advanced Mathematics`, `Biology`) |
+| `r/`   | Hourly rate (SGD) | Yes      | Positive integer value (including zero)                             |
+| `a/`   | Address           | No       | Any text                                                            |
+| `t/`   | Tag               | No       | Alphanumeric text, no spaces                                        |
 
 <box type="tip" seamless>
 
 **Tip:**
 
-1. Tags are powerful ways to organise contacts. You can use multiple tags in a tutor contact to provide more information, e.g. `t/home` for home tutoring
-   services.
-2. A person can have any number of tags (including 0) and more than one subjects.
-3. The parameters of the command can be entered in any orders.
-
-</box>
-
-<box type="warning" seamless>
-
-**Note:** Adding a tutor with the same phone number, or email as an existing entry is not allowed. Tuto treats each field as unique and will reject the operation if any duplicate is detected.
-
-</box>
-
-**Examples:**
-
-```
-add n/John Doe p/98765432 e/johnd@example.com s/Chemistry r/50
-```
-
-Adds John Doe as a Chemistry tutor charging $50/hr, with no address or tags.
-
-```
-add n/Betsy Crowe p/1234567 e/betsycrowe@example.com a/Newgate Prison s/Biology r/55 t/experienced t/recommended
-```
-
-Adds Betsy Crowe as a Biology tutor with an address and two tags.
-
-**Expected output:**
-
-```
-New person added: John Doe; Phone: 98765432; Email: johnd@example.com; Address: ; Subject: Chemistry; Rate: 50; Tags:
-```
-
----
-
-### Listing All Tutors : `list`
-
-Displays all tutor profiles stored in Tuto.
-
-![list message](images/listMessage.png)
-
-**Format:** `list`
-
-**Expected output:** The Tutor List Panel refreshes to show all contacts. The Top Left Result Display shows the total number of tutors listed.
-
-<box type="tip" seamless>
-
-**Tip:** Use `list` to reset the view after a `find` command has filtered your results.
+1. Tags are powerful ways to organise Tutor Profiles. You can use multiple tags to provide more detail, e.g. `t/home` and `t/weekend`.
+2. A person can have any number of tags (including 0) and multiple subjects.
+3. Command parameters can be entered in any order.
 
 </box>
 
 ---
 
-### Sorting the Tutor List : `sort`
+#### Constraints
 
-Changes the **order** of tutors in the Tutor List Panel. Sorting is by **name** or **hourly rate** only; it does not remove or hide tutors.
+Tuto natively handles duplicates to secure your data. See [Duplicate Tutors are Not Allowed](#duplicate-tutors-are-not-allowed) for more details.
 
-**Format:**
+![add constraint phone](images/add_cons_phone.png)
 
-```
-sort FIELD ORDER
-```
+![add constraint email](images/add_cons_email.png)
 
-| Part    | Meaning         | Allowed values                                              |
-| ------- | --------------- | ----------------------------------------------------------- |
-| `FIELD` | What to sort by | `name` or `rate` (case-insensitive)                         |
-| `ORDER` | Sort direction  | `asc` (ascending) or `desc` (descending) (case-insensitive) |
+---
 
-- **Name:** Alphabetical order by full name (case-insensitive).
-- **Rate:** Numeric order by hourly rate. If two tutors have the **same rate**, they are ordered by **name** (ascending) as a tie-break.
+#### Examples
 
-**Examples:**
+**Adding with minimum required fields**
 
 ```
-sort name asc
+add n/ elizabeth chang p/ 82516782 e/ elizabeth@example.com s/ piano r/ 76
 ```
 
-Shows tutors from A → Z by name.
+![add minimum required](images/add_min_req.png)
+
+---
+
+**Adding with optional fields (address and tags)**
 
 ```
-sort rate desc
+add n/ gabrielle chee p/ 87429246 e/ gabrielle@example.com s/ computing r/ 85 a/ 8 napier road t/ prodigy
 ```
 
-Shows highest hourly rate first.
-
-**Expected output:** A confirmation message in the Result Display, and the Tutor List Panel updates to the new order. The header above the list also reflects the active sort.
-
-<box type="warning" seamless>
-
-**Indices update after sorting:** Because `edit` and `delete` use the position number in the **current** list, running `sort` changes which tutor is at each index. See [Displayed indices change after `sort` and `delete`](#notes-on-command-format) before your next command.
-
-</box>
+![add optionals](images/add_optional.png)
 
 ---
 
 ### Editing a Tutor Profile : `edit`
 
-Updates one or more fields of an existing tutor profile.
+Updates one or more fields of an existing Tutor Profile.
 
-**Format:**
+![Edit command hero image](images/editMessage.png)
 
-```
-edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT]… [r/RATE] [t/TAG]…
-```
+**Format:** edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT]… [r/RATE] [t/TAG]…
+
+---
+
+#### Parameters
 
 - `INDEX` refers to the number shown next to the tutor in the current list. It must be a **positive integer** (1, 2, 3 …).
-- After a **`sort`** or **`delete`**, indices may no longer match what you saw earlier — see [Displayed indices change after `sort` and `delete`](#notes-on-command-format).
+- **Accepted Prefixes:** Accepts the same prefixes (`n/`, `p/`, `e/`, `s/`, `r/`, `a/`, `t/`) as the `add` command.
+- After a **`sort`** or **`delete`**, indices may no longer match what you saw earlier — see [Understanding List Indices](#understanding-list-indices).
 - At least one field must be provided.
 - Existing values are replaced with the new values you provide.
 
-<box type="warning" seamless>
+---
 
-**Note:** Editing subjects **replaces all existing subjects** for that tutor — it does not add to them. Use multiple `s/` prefixes for multiple subjects (e.g. `edit INDEX s/Math s/English`). A single `s/Math Physics` value is **one** subject whose name contains a space, not two separate subjects.
-
-</box>
+#### Constraints
 
 <box type="warning" seamless>
 
-**Note:** Tutors must always have **at least one subject** (same as when adding a tutor). You cannot clear all subjects with a bare `s/` or leave a profile with no subjects. If a data file is damaged and a tutor has no subjects, use `edit` with at least one valid `s/SUBJECT` to fix the profile.
+- **Subjects are replaced, not added:** Any new subjects you provide will completely overwrite the tutor's existing subjects. Use multiple `s/` prefixes for multiple subjects (e.g. `edit INDEX s/Math s/English`). A single `s/Math Physics` value is **one** subject whose name contains a space, not two separate subjects.
+- **At least one subject:** You cannot clear all subjects with a bare `s/` or leave a profile with no subjects. If a data file is damaged and a tutor has no subjects, use `edit` with at least one valid `s/SUBJECT` to fix the profile.
+- **Tags are replaced, not added:** Any new tags you provide will completely overwrite the tutor's existing tags. To clear all tags, use an empty prefix: `t/`. To append a new tag, you must retype the existing ones.
+- **Identical edits are accepted:** Editing a tutor with values they already have (e.g. changing their rate to the same rate they currently charge) will be accepted as a valid command without throwing an error.
+- **No duplicates:** You cannot edit a profile to have the exact same phone number or email address as another tutor. See [Duplicate Tutors are Not Allowed](#duplicate-tutors-are-not-allowed).
 
 </box>
 
-<box type="warning" seamless>
+---
 
-**Note:** Editing tags **replaces all existing tags** — it does not add to them. To remove all tags, use `t/` with nothing after it. To keep existing tags while adding a new one, you must retype all the tags you want to keep.
+#### Examples
 
-</box>
-
-<box type="warning" seamless>
-
-**Note:** Editing a tutor with same phone number or email as an existing entry is not allowed. Tuto treats each field as unique and will reject the operation if any duplicate is detected.
-
-</box>
-
-**Examples:**
+**Editing multiple fields at once**
 
 ```
-edit 1 p/91234567 e/johndoe@example.com
+edit 3 e/ qingrong@example.com t/ best
 ```
 
-Updates the phone number and email of the 1st tutor in the list.
+Updates the phone number and email of the 3rd tutor in the list.
+
+**Replacing tags**
 
 ```
-edit 2 n/Betsy Crower t/
+edit 2 t/
 ```
 
 Renames the 2nd tutor and removes all of their tags.
+
+**Updating subject and rate**
 
 ```
 edit 1 s/Physics r/30
@@ -378,15 +354,73 @@ Sets the 2nd tutor's subjects to Math and English only (replacing any previous s
 
 **Expected output:**
 
+![edit_expected](images/edit_expected.png)
+
+---
+
+#### Invalid Usage
+
+**Duplicate Output:**
+![edit_duplicate](images/edit_duplicate.png)
+
+**Error Output:**
+![edit_error](images/edit_error.png)
+
+---
+
+### Deleting a Tutor : `delete`
+
+Permanently removes a Tutor Profile from Tuto.
+
+![Delete command hero image](images/deleteMessage.png)
+
+**Format:** `delete INDEX`
+
+---
+
+#### Parameters
+
+- `INDEX` must be a **positive integer** matching a tutor's position in the currently displayed list.
+- After you delete someone, **every tutor below that row moves up** and gets a new index. After a **`sort`**, positions change too. See [Understanding List Indices](#understanding-list-indices).
+
+<box type="warning" seamless>
+
+**Caution:** Deletion is permanent and cannot be undone. Double-check the index before running this command.
+
+</box>
+
+---
+
+#### Examples
+
+**Deleting from the full list**
+
 ```
-Edited Person: John Doe; Phone: 91234567; Email: johndoe@example.com; Address: ; Subject: Chemistry; Rate: 50; Tags:
+delete 2
 ```
+
+Deletes the Tutor profile with index 2.
+
+**Deleting from search results**
+
+```
+find s/Biology
+delete 1
+```
+
+Deletes the Tutor Profile with index 1
+
+**Expected output:**
+
+![Delete success output](images/delete_success.png)
 
 ---
 
 ### Finding Tutors : `find`
 
 Search for tutors by keyword, name, subject, or hourly rate — or combine them for precise filtering.
+
+![Find message](images/find_math_S_advancedmath.png)
 
 ---
 
@@ -530,53 +564,117 @@ Matching tutors appear in the right panel. If no matches are found:
 
 Only **one** `n/` and one `r/` are allowed per command.
 
-| ❌ Invalid           | Reason                    |
-| -------------------- | ------------------------- |
-| `find r/16 r/17`     | Multiple `r/` not allowed |
-| `find n/Alice n/Bob` | Multiple `n/` not allowed |
+| ❌ Invalid           | Reason                            |
+| -------------------- | --------------------------------- |
+| `find r/16 r/17`     | Multiple `r/` not allowed         |
+| `find n/Alice n/Bob` | Multiple `n/` not allowed         |
+| `find`               | Keywords and/or Prefixes required |
+
+</box>
+
+![Invalid Rates](images/find_invalid_rate.png)
+
+![Invalid Names](images/find_invalid_name.png)
+
+![Invalid Command](images/find_generic_error.png)
+
+---
+
+### Sorting the Tutor List : `sort`
+
+Changes the **order** of tutors in the Tutor List Panel. Sorting is by **name** or **hourly rate** only; it does not remove or hide tutors.
+
+![Sort command hero image](images/sort_hero.png)
+
+**Format:** `sort FIELD ORDER`
+
+---
+
+#### Parameters
+
+| Part    | Meaning         | Allowed values                                              |
+| ------- | --------------- | ----------------------------------------------------------- |
+| `FIELD` | What to sort by | `name` or `rate` (case-insensitive)                         |
+| `ORDER` | Sort direction  | `asc` (ascending) or `desc` (descending) (case-insensitive) |
+
+- **Name:** Alphabetical order by full name (case-insensitive).
+- **Rate:** Numeric order by hourly rate. If two tutors have the **same rate**, they are ordered by **name** (ascending) as a tie-break.
+
+---
+
+#### Examples
+
+**Sorting by name**
+
+```
+sort name asc
+```
+
+Shows tutors in alphabetical order from A → Z by name.
+
+**Sorting by rate**
+
+```
+sort rate desc
+```
+
+Shows highest hourly rate first.
+
+**Expected output:** A confirmation message in the Result Display, and the Tutor List Panel updates to the new order. The header above the list also reflects the active sort.
+
+![Sort successful output](images/sort_successful.png)
+
+<box type="warning" seamless>
+
+**Indices update after sorting:** Because `edit` and `delete` use the position number in the **current** list, running `sort` changes which tutor is at each index. See [Understanding List Indices](#understanding-list-indices) before your next command.
 
 </box>
 
 ---
 
-### Deleting a Tutor : `delete`
+#### Invalid Usage
 
-Permanently removes a tutor profile from Tuto.
+**Error Output:**
 
-![delete message](images/deleteMessage.png)
+![Sort error output](images/sort_error.png)
 
-Format: `delete INDEX`
+![Sort error output](images/sort_no_param.png)
 
-- `INDEX` must be a **positive integer** matching a tutor's position in the currently displayed list.
-- After you delete someone, **every tutor below that row moves up** and gets a new index. After a **`sort`**, positions change too. See [Displayed indices change after `sort` and `delete`](#notes-on-command-format).
+---
 
-<box type="warning" seamless>
+### Listing All Tutors : `list`
 
-**Caution:** Deletion is permanent and cannot be undone. Double-check the index before running this command.
+Displays all tutor profiles stored in Tuto. The GUI features a left panel that displays the full contact list at all times, so this command is predominantly used in the CLI or to quickly clear search filters in the main view.
+
+![List command hero image](images/listMessage.png)
+
+**Format:** `list`
+
+**Expected output:** The central panel automatically updates to show all stored tutors, and the result display shows `✨  Listed all tutors!`.
+
+<box type="tip" seamless>
+
+**Tip:** Run this command to reset the view after a `find` command in CLI.
 
 </box>
 
-**Examples:**
+---
 
-```
-list
-delete 2
-```
+### Clearing All Entries : `clear`
 
-Deletes the 2nd tutor in the full list.
+Permanently clears all tutor entries from Tuto.
 
-```
-find s/Biology
-delete 1
-```
+![Clear command hero image](images/clearMessage.png)
 
-Deletes the 1st tutor returned in the Biology search results.
+**Format:** `clear`
 
-**Expected output:**
+**Expected output:** All tutor profiles are deleted, leaving the Tutor List Panel empty. The result display confirms that the data has been successfully cleared.
 
-```
-Deleted Person: Betsy Crowe; Phone: 1234567; Email: betsycrowe@example.com; Address: Newgate Prison; Subject: Biology; Rate: 55; Tags: [experienced][recommended]
-```
+<box type="warning" seamless>
+
+**Caution:** This action permanently deletes all data and cannot be undone. Use with extreme care!
+
+</box>
 
 ---
 
@@ -589,6 +687,8 @@ Closes the Tuto application.
 When `exit` executes successfully, Tuto closes. Tutor data is saved automatically as part of command execution.
 
 ---
+
+## Data Management
 
 ### Saving Your Data
 
@@ -644,14 +744,14 @@ A: The Help Window may be minimised. Check your taskbar and restore it manually.
 
 ## Command Summary
 
-| Action     | Format                                                                                                | Example                                                                                                           |
-| ---------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **Help**   | `help`                                                                                                | `help`                                                                                                            |
-| **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL s/SUBJECT1 s/SUBJECT2 ... s/SUBJECTn r/RATE [a/ADDRESS] [t/TAG]…​` | `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 s/Biology r/45 t/friend t/colleague` |
-| **List**   | `list`                                                                                                | `list`                                                                                                            |
-| **Sort**   | `sort FIELD ORDER`                                                                                    | `sort name asc`, `sort rate desc`                                                                                 |
-| **Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT]… [r/RATE] [t/TAG]…`                   | `edit 2 n/James Lee e/james@example.com`                                                                          |
-| **Find**   | `find KEYWORD` \| `find [PREFIXES]` \| `find KEYWORD [PREFIXES]`                                      | `find geography`, `find s/Biology r/45`, `find korean r/>50`                                                      |
-| **Delete** | `delete INDEX`                                                                                        | `delete 3`                                                                                                        |
-| **Clear**  | `clear`                                                                                               | `clear`                                                                                                           |
-| **Exit**   | `exit`                                                                                                | `exit`                                                                                                            |
+| Action   | Format                                                                                                | Example                                                                                                           |
+| -------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **Help** | `help`                                                                                                | `help`                                                                                                            |
+| **Add**  | `add n/NAME p/PHONE_NUMBER e/EMAIL s/SUBJECT1 s/SUBJECT2 ... s/SUBJECTn r/RATE [a/ADDRESS] [t/TAG]…​` | `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 s/Biology r/45 t/friend t/colleague` |
+| **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [s/SUBJECT]… [r/RATE] [t/TAG]…`                  | `edit 2 n/James Lee e/james@example.com`                                                                          |
+| **Delete** | `delete INDEX` | `delete 3` |
+| **Find** | `find KEYWORD` \| `find [PREFIXES]` \| `find KEYWORD [PREFIXES]` | `find geography`, `find s/Biology r/45`, `find korean r/>50` |
+| **Sort** | `sort FIELD ORDER` | `sort name asc`, `sort rate desc` |
+| **List** | `list` | `list` |
+| **Clear** | `clear` | `clear` |
+| **Exit** | `exit` | `exit` |

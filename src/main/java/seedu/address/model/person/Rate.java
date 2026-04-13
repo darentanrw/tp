@@ -3,7 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 
 /**
  * Represents a Person's rate in the address book.
@@ -31,13 +31,13 @@ public class Rate {
                     + "e.g. r/10-20.";
 
     public static final String MESSAGE_NEGATIVE_RATE_NOT_ALLOWED =
-            "Rate cannot be negative. Please enter a non-negative value.";
+            "Rate cannot be negative.";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "\\d+";
+    public static final String VALIDATION_REGEX = "\\d+(\\.\\d+)?";
 
     public final String rate;
 
@@ -49,7 +49,7 @@ public class Rate {
     public Rate(String rate) {
         requireNonNull(rate);
         checkArgument(isValidRate(rate), MESSAGE_CONSTRAINTS);
-        this.rate = new BigInteger(rate).toString();
+        this.rate = new BigDecimal(rate).stripTrailingZeros().toPlainString();
     }
 
     /**
@@ -72,8 +72,8 @@ public class Rate {
      * @return a negative integer, zero, or a positive integer as this value is numerically less than, equal to,
      *         or greater than {@code other}
      */
-    public int compareNumericValueTo(BigInteger other) {
-        return new BigInteger(rate).compareTo(other);
+    public int compareNumericValueTo(BigDecimal other) {
+        return new BigDecimal(rate).compareTo(other);
     }
 
     @Override

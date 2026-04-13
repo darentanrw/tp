@@ -34,8 +34,17 @@ This guide is written for parents who are comfortable using a keyboard and want 
   - [Commands](#commands)
     - [Viewing Help : `help`](#viewing-help-help)
     - [Adding a Tutor : `add`](#adding-a-tutor-add)
+      - [Parameters](#parameters)
+      - [Constraints](#constraints)
+      - [Examples](#examples)
     - [Editing a Tutor Profile : `edit`](#editing-a-tutor-profile-edit)
+      - [Parameters](#parameters-1)
+      - [Constraints](#constraints-1)
+      - [Examples](#examples-1)
+      - [Invalid Usage](#invalid-usage)
     - [Deleting a Tutor : `delete`](#deleting-a-tutor-delete)
+      - [Parameters](#parameters-2)
+      - [Examples](#examples-2)
     - [Finding Tutors : `find`](#finding-tutors-find)
       - [Prefixes](#prefixes)
       - [Search Modes](#search-modes)
@@ -43,6 +52,9 @@ This guide is written for parents who are comfortable using a keyboard and want 
       - [Examples](#examples-3)
       - [Invalid Usage](#invalid-usage-1)
     - [Sorting the Tutor List : `sort`](#sorting-the-tutor-list-sort)
+      - [Parameters](#parameters-3)
+      - [Examples](#examples-4)
+      - [Invalid Usage](#invalid-usage-2)
     - [Listing All Tutors : `list`](#listing-all-tutors-list)
     - [Clearing All Entries : `clear`](#clearing-all-entries-clear)
     - [Exiting the Program : `exit`](#exiting-the-program-exit)
@@ -226,7 +238,7 @@ Adds a new Tutor Profile to Tuto.
 | `p/`   | Phone number      | Yes      | 8 digits for Singapore number, 10 digits excluding '+' for international number                        |
 | `e/`   | Email             | Yes      | Valid email format (e.g. `user@example.com`)                                                           |
 | `s/`   | Subject           | Yes      | Alphanumeric text + spaces (e.g. `Advanced Mathematics`, `Biology`)                                    |
-| `r/`   | Hourly rate (SGD) | Yes      | 0 or any positive integer                                                                              |
+| `r/`   | Hourly rate (SGD) | Yes      | 0 or any decimal value e.g. `25` or `25.50`) |
 | `a/`   | Address           | No       | Any text (must not contain valid prefixes such as s/, as these will be interpreted as separate fields) |
 | `t/`   | Tag               | No       | Alphanumeric text, no spaces                                                                           |
 
@@ -238,7 +250,7 @@ Adds a new Tutor Profile to Tuto.
 2. A person can have any number of tags (including 0) and multiple subjects.
 3. Command parameters can be entered in any order.
 4. You cannot repeat the same subject or tag value in one command, even if the casing is different (e.g. s/Math s/math or t/friend t/friend is rejected).
-5. Rate can only be positive integer. No decimal values are allowed.
+5. Rate must be zero or positive; decimals are allowed. Negative rates are rejected.
 </box>
 
 ---
@@ -461,7 +473,11 @@ Search for tutors by keyword, name, subject, or hourly rate — or combine them 
 | Above  | `r/>RATE`       | Tutors charging more than `RATE`                        |
 | Below  | `r/<RATE`       | Tutors charging less than `RATE`                        |
 
-In every `r/` field above, each numeric token (`RATE`, `RATE1`, `RATE2`) must be **non-negative** (integers only; no negative numbers). For ranges, `RATE1` must also be less than or equal to `RATE2`.
+For **exact** (`r/RATE`) and **range** (`r/RATE1-RATE2`), each numeric token must be **non-negative**, with an optional decimal part (e.g. `40.5`). For ranges, `RATE1` must be less than or equal to `RATE2`.
+
+For **below** (`r/<RATE`), `RATE` must be **greater than zero** (`r/<0` and `r/<-1` is rejected); decimals are allowed.
+
+For **above** (`r/>RATE`), `RATE` may be **negative, zero, or positive** (optional decimal part). Tutor rates stored in Tuto are never negative, so a negative threshold (e.g. `r/>-1`) matches anyone with a rate greater than that value.
 
 **Mixed prefixes** — all conditions must be met
 
@@ -589,7 +605,7 @@ Changes the **order** of tutors in the Tutor List Panel. Sorting is by **name** 
 | `ORDER` | Sort direction  | `asc` (ascending) or `desc` (descending) (case-insensitive) |
 
 - **Name:** Alphabetical order by full name (case-insensitive).
-- **Rate:** Numeric order by hourly rate. If two tutors have the **same rate**, they are ordered by **name** (ascending) as a tie-break.
+- **Rate:** Numeric order by hourly rate (including decimal rates). If two tutors have the **same rate**, they are ordered by **name** (ascending) as a tie-break.
 
 ---
 

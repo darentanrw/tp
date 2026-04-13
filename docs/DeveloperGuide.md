@@ -298,14 +298,14 @@ This ensures that phone number conflict is detected first, followed by email add
     - Pros: Simpler implementation
     - Cons: Allows duplicate entries with identical contact details
 
-**Aspect: Rates are restricted to whole numbers**
+**Aspect: Rates use non-negative numeric values (including decimals)**
 
-- **Alternative 1 (current choice):** Rates are restricted to whole numbers
-    - Pros: Reflects common real-world practice, where tutors typically state their hourly rates as whole numbers
-    - Cons: Does not account for edge cases where fractional rates (e.g. $25.50/hour) may be used
-- **Alternative 2:** Rates allow decimal values
-    - Pros: More flexible and accommodates all possible pricing formats
-    - Cons: Adds unnecessary complexity for a feature that is rarely used in practice
+- **Alternative 1 (current choice):** Rates accept non-negative integers or decimals (validated and compared as decimal values for `find` and `sort`)
+    - Pros: Supports common cases such as $25.50/hour; sorting and rate filters follow true numeric order
+    - Cons: Slightly more validation and parsing logic than integers-only
+- **Alternative 2:** Rates restricted to whole numbers only
+    - Pros: Simpler validation
+    - Cons: Cannot represent fractional hourly rates; less flexible for real-world pricing
 
 **Aspect: Address field is optional**
 
@@ -324,7 +324,7 @@ This ensures that phone number conflict is detected first, followed by email add
 - **Alternative 2:** Phone number field follows the original implementation of at least 3 digits and no special characters
     - Pros: Simple to implement, no changes required
     - Cons: Does not account for the case where tutor may only have international number (e.g. Tutor is from Malaysia)
-  
+
 #### Class Diagram
 
 The following class diagram shows the key classes involved in enforcing uniqueness constraints,
@@ -398,7 +398,7 @@ Users can search for specific attributes using prefixes (e.g., `n/`, `s/`, `r/`,
 - **Implementation:** `FindCommandParser` parses the mapped values for each specified prefix.
     - It creates specific predicates for each attribute (e.g., `NameContainsKeywordsPredicate`, `RateRangePredicate`, `SubjectContainsKeywordsPredicate`).
     - Multiple occurrences of keywords or prefixes are supported. For names (`n/Alice Peter`), space-separated keywords are evaluated using OR logic (returns profiles matching any of the names). For subjects and tags (e.g., `s/Math s/Physics`), multiple occurrences of the prefix itself are evaluated using AND logic within their respective predicates (returns profiles matching all specified prefixes).
-    - Rate filtering dynamically handles various mathematical boundaries (e.g., exact `r/50`, ranges `r/40-60`, or inequalities `r/<50`).
+    - Rate filtering dynamically handles various mathematical boundaries (e.g., exact `r/50`, ranges `r/40-60`, or inequalities `r/<50`) using non-negative decimal bounds where applicable.
 
 **3. General Search + Attribute Filtering**
 Users can combine general search keywords with specific attribute filters to effectively refine their results.
@@ -796,6 +796,8 @@ testers are expected to do more _exploratory_ testing.
        Reason: Tuto prohibits the addition of a person whose contact number and/or email address already exists within the current list of tutor profiles.
     2. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/s t/friend`<br>
        Expected: No person is added. An error message indicating that rates can only contain numbers is shown
+    3. Test case: `add n/Jane Smith p/91234567 e/jane@example.com a/Clementi 6th Street s/Mathematics r/-10 t/friend`<br>
+       Expected: No person is added. An error message indicating that the rate cannot be negative is shown
 
 9. Adding a person with duplicate phone or email
     1. Prerequisites: A person with phone number `91234567` already exists in the list, and a person with email `jane@example.com` already exists in the list.
@@ -914,6 +916,8 @@ testers are expected to do more _exploratory_ testing.
        Expected: No person is edited. An error message indicating that emails should be of the format `local-part@domain` is shown.
     5. Test case: `edit 1 r/s`<br>
        Expected: No person is edited. An error message indicating that rates can only contain numbers is shown.
+    6. Test case: `edit 1 r/-5`<br>
+       Expected: No person is edited. An error message indicating that the rate cannot be negative is shown.
 10. Editing a person without changing any actual value
     1. Prerequisites: List all persons using the `list` command. The first tutor already has the name `Jane Doe`.
     2. Test case: `edit 1 n/Jane Doe`<br>
@@ -1000,13 +1004,13 @@ testers are expected to do more _exploratory_ testing.
 5. Finding with nonsensical rate boundary formatting
     1. Prerequisites: Tuto is running.
     2. Test case: `find r/ABC`<br>
-       Expected: No search is performed. The text feedback area displays an error stating the Rate must be a valid integer. The blue search query bar and result list remain hidden.
+       Expected: No search is performed. The text feedback area displays an error indicating invalid rate format for the find command. The blue search query bar and result list remain hidden.
     3. Test case: `find r/50-40`<br>
        Expected: No search is performed. The text feedback area displays an error indicating that for a rate range, the lower bound cannot be strictly greater than the upper bound. The blue search query bar and result list remain hidden.
-6. Rate integer overflow vulnerabilities (Extreme limits)
+6. Rate numeric bounds (very large values)
     1. Prerequisites: Tuto is running.
     2. Test case: `find r/>9999999999999`<br>
-       Expected: The system should not crash from an unhandled `NumberFormatException`. No search is performed. The text feedback area displays a red cross error indicating that the rate provided is invalid (violates valid Java integer limits or rate constraints). The blue search query bar and result list remain hidden.
+       Expected: The system should not crash. Rate bounds for `find` are parsed as decimal values, the search proceeds with the given bound or shows a format error if the value is invalid.
 7. Prefix case sensitivity and preamble swallowing (Mistyping prefixes)
     1. Prerequisites: Ensure the contact list has at least one Tutor with the name "Alice".
     2. Test case: `find N/Alice`<br>
@@ -1030,7 +1034,7 @@ testers are expected to do more _exploratory_ testing.
 12. Rate attribute formatting anomalies (Zero-padding and negatives)
     1. Prerequisites: Ensure the contact list contains a tutor profile with a rate of `0`.
     2. Test case: `find r/00000000`<br>
-       Expected: A successful search occurs. The parser evaluates the heavily padded string as the integer `0`. The blue search query bar shows `Rate: "00000000"` (or mapped equivalent) and lists the matched tutor profiles matching the exact rate of 0.
+       Expected: A successful search occurs. The parser evaluates the heavily padded string as the numeric value `0`. The blue search query bar shows `Rate: "00000000"` (or mapped equivalent) and lists the matched tutor profiles matching the exact rate of 0.
     3. Test case: `find r/-5` or `find r/--50`<br>
        Expected: No search is performed. The text feedback area displays a red cross error strongly preventing negative rates or invalid mathematical delimiters.
 
@@ -1047,7 +1051,7 @@ See also: [Sorting the Tutor List](UserGuide.md#sorting-the-tutor-list-sort) in 
     2. Test case: `sort name desc`<br>
        Expected: Success message mentions name and **descending** order. The list shows tutors from Z → A by full name. The list header reflects descending name order.
 3. Sorting by rate in ascending order
-    1. Prerequisites: Use `list` so all tutors are shown. Ensure there are at least three tutors with **different** hourly rates.
+    1. Prerequisites: Use `list` so all tutors are shown. Ensure there are at least three tutors with **different** hourly rates (decimal rates count as distinct numeric values where applicable).
     2. Test case: `sort rate asc`<br>
        Expected: Success message mentions rate and **ascending** order. The list shows lowest rate first, then increasing. The list header reflects sorting by rate (ascending).
 4. Sorting by rate in descending order

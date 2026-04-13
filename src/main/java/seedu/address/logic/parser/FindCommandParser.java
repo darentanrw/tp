@@ -9,7 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_RATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SUBJECT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +29,6 @@ import seedu.address.model.person.SubjectContainsKeywordsPredicate;
 import seedu.address.model.person.UniversalSearchPredicate;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagContainsKeywordsPredicate;
-
 
 /**
  * Parses input arguments and creates a new FindCommand object.
@@ -130,6 +129,12 @@ public class FindCommandParser implements Parser<FindCommand> {
     private void addRatePart(ArgumentMultimap argMultimap, List<String> parts) {
         if (argMultimap.getValue(PREFIX_RATE).isPresent()) {
             String rateValue = argMultimap.getValue(PREFIX_RATE).get().trim();
+            if (rateValue.matches("[<>]\\d.*")) {
+                rateValue = rateValue.charAt(0)
+                        + new BigDecimal(rateValue.substring(1)).stripTrailingZeros().toPlainString();
+            } else if (rateValue.matches("\\d+(\\.\\d+)?")) {
+                rateValue = new BigDecimal(rateValue).stripTrailingZeros().toPlainString();
+            }
             parts.add("Rate: \"" + rateValue + "\"");
         }
     }
@@ -291,13 +296,13 @@ public class FindCommandParser implements Parser<FindCommand> {
     }
 
     /**
-     * Parses a non-empty digit sequence for find-command rate bounds.
+     * Parses a non-negative number (integer or decimal) for find-command rate bounds.
      */
-    private BigInteger parseRateBigIntegerBound(String digits) throws ParseException {
+    private BigDecimal parseRateDecimalBound(String digits) throws ParseException {
         if (digits.isEmpty() || !digits.matches(Rate.VALIDATION_REGEX)) {
-            throw new ParseException(Rate.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Rate.MESSAGE_INVALID_RATE_FIND_FORMAT);
         }
-        return new BigInteger(digits);
+        return new BigDecimal(digits);
     }
 
     private Predicate<Person> parseRatePredicate(ArgumentMultimap argMultimap) throws ParseException {
@@ -309,27 +314,35 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // If it contains ANY non-digit separator but no '-'
-        if (!rateArgs.contains("-") && !rateArgs.matches("[<>]?\\d+")) {
-            throw new ParseException(Rate.MESSAGE_INVALID_RATE_RANGE_DELIMITER);
+        if (!rateArgs.contains("-") && !rateArgs.matches("[<>]?\\d+(\\.\\d+)?")) {
+            throw new ParseException(Rate.MESSAGE_INVALID_RATE_FIND_FORMAT);
         }
 
         // Detect negative rate like r/-10 (but not range like 10-20)
-        if (rateArgs.matches("-\\d+")) {
+        if (rateArgs.matches("-\\d+(\\.\\d+)?")) {
             throw new ParseException(Rate.MESSAGE_NEGATIVE_RATE_NOT_ALLOWED);
         }
 
         // Case 1: Less-than search, e.g. r/<10
         if (rateArgs.startsWith("<")) {
             String num = rateArgs.substring(1).trim();
-
-            return new RateLessThanPredicate(parseRateBigIntegerBound(num));
+            if (num.matches("-\\d+(\\.\\d+)?")) {
+                throw new ParseException(Rate.MESSAGE_NEGATIVE_RATE_NOT_ALLOWED);
+            }
+            BigDecimal bound = parseRateDecimalBound(num);
+            if (bound.signum() == 0) {
+                throw new ParseException(Rate.MESSAGE_NEGATIVE_RATE_NOT_ALLOWED);
+            }
+            return new RateLessThanPredicate(bound);
         }
 
         // Case 2: Greater-than search, e.g. r/>10
         if (rateArgs.startsWith(">")) {
             String num = rateArgs.substring(1).trim();
-
-            return new RateGreaterThanPredicate(parseRateBigIntegerBound(num));
+            if (!num.matches("-?\\d+(\\.\\d+)?")) {
+                throw new ParseException(Rate.MESSAGE_INVALID_RATE_FIND_FORMAT);
+            }
+            return new RateGreaterThanPredicate(new BigDecimal(num));
         }
 
         // Case 3: Rate range search, e.g. r/10-20
@@ -350,8 +363,8 @@ public class FindCommandParser implements Parser<FindCommand> {
                 throw new ParseException(Rate.MESSAGE_MISSING_RATE_BOUND);
             }
 
-            BigInteger lowerBound = parseRateBigIntegerBound(lower);
-            BigInteger upperBound = parseRateBigIntegerBound(upper);
+            BigDecimal lowerBound = parseRateDecimalBound(lower);
+            BigDecimal upperBound = parseRateDecimalBound(upper);
 
             // Reject reversed range like r/20-10
             if (lowerBound.compareTo(upperBound) > 0) {
@@ -363,7 +376,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // Case 4: Exact match, e.g. r/10
-        parseRateBigIntegerBound(rateArgs);
+        parseRateDecimalBound(rateArgs);
         return new RateEqualsPredicate(new Rate(rateArgs));
     }
 

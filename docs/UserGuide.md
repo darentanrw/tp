@@ -59,8 +59,6 @@ This guide is written for parents who are comfortable using a keyboard and want 
     - [Clearing All Entries : `clear`](#clearing-all-entries-clear)
     - [Exiting the Program : `exit`](#exiting-the-program-exit)
   - [Data Management](#data-management)
-    - [Saving Your Data](#saving-your-data)
-    - [Editing the Data File Directly](#editing-the-data-file-directly)
   - [FAQ](#faq)
   - [Known Issues](#known-issues)
   - [Command Summary](#command-summary)
@@ -205,11 +203,11 @@ When you search for a tutor (e.g., using `find`), the index numbers **do not res
 
 ### Duplicate Tutors are Not Allowed
 
-Tuto considers a Tutor Profile to be a duplicate if it shares the exact same **Phone number** or **Email** as an existing tutor. Both during `add` and `edit` operations, Tuto protects your data by rejecting the command if it detects a clash.
+Tuto protects your data by ensuring no two tutor profiles share the exact same **Phone number** or **Email address**. 
 
 <box type="warning" seamless>
 
-**Duplicate Error:** Neither adding a new tutor nor editing an existing one is permitted if it would result in two Tutor Profiles having the same phone number or email address.
+**Duplicate Error:** If an `add` or `edit` command results in a clash with an existing phone number or email, the command will be rejected to prevent duplicate profiles.
 
 </box>
 
@@ -484,6 +482,20 @@ If your search is returning confusing or empty results, double-check your prefix
 | **Filtering**        | `find [PREFIXES]` (case-insensitive)                                                   | Tutors matching **all** prefix conditions                              |
 | **General + Filter** | `find KEYWORD [MORE_KEYWORDS] [PREFIXES]` (case-insensitive; keywords before prefixes) | Tutors matching **any** keyword, narrowed by **all** prefix conditions |
 
+<box type="warning" seamless>
+
+**Order Matters for Keywords!**
+
+Any general keywords (including unsupported prefixes you want treated as keywords) **MUST** be typed *before* any valid prefixes. 
+
+If you type a keyword *after* a valid prefix, Tuto will absorb it and think it is part of that prefix's value! 
+
+For example:
+- `find x/abc n/Alex` works correctly (searches for keyword `"x/abc"` and filters name by `"Alex"`).
+- `find n/Alex x/abc` will completely fail because Tuto thinks the name you are searching for is exactly `"Alex x/abc"`.
+
+</box>
+
 ---
 
 #### How Matching Works
@@ -683,9 +695,11 @@ Shows highest hourly rate first.
 
 **Error Output:**
 
+Tuto will return an error if an unrecognised field is used, or if the parameter is missing:
+
 ![Sort error output](images/sort_error.png)
 
-![Sort error output](images/sort_no_param.png)
+![Sort error output - missing parameter](images/sort_no_param.png)
 
 ---
 
@@ -749,22 +763,14 @@ When `exit` executes successfully, Tuto closes. Tutor data is saved automaticall
 
 ## Data Management
 
-### Saving Your Data
-
-Tuto's data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+Tuto's data is saved automatically as a JSON file at `[JAR file location]/data/addressbook.json`. Advanced users may update data directly by editing this file using any text editor.
 
 <box type="warning" seamless>
-**Caution:** If the file is saved in an invalid format, Tuto will discard all data and start fresh on the next launch. **Back up the file before making any edits.** Additionally, values outside accepted ranges may cause Tuto to behave unexpectedly.
-</box>
 
-### Editing the Data File Directly
+**Caution when editing the data file directly:**
+- If your changes make the file format invalid, Tuto will discard all data and start with an empty data file on the next launch. **Always back up the file before making any edits.**
+- Certain edits can cause Tuto to behave in unexpected ways (e.g., if a value is outside the acceptable range). Edit the data file only if you are confident that you can update it correctly.
 
-Advanced users may edit the data file manually using any text editor.
-
-<box type="warning" seamless>
-**Caution:** If your changes to the data file make its format invalid, Tuto will discard all data and start with an empty data file on the next launch. Back up the file before editing it.
-
-Furthermore, certain edits can cause Tuto to behave in unexpected ways (e.g., if a value is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
 ---

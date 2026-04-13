@@ -50,7 +50,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = tokenizeAndValidate(args);
 
-        // Validate combinations (preamble + unsupported prefixes) early.
+        // Validate unsupported prefixes for ALL cases
         validatePreamblePrefixCombination(argMultimap);
 
         // Build the combined predicate in a single helper to keep this method high-level.
@@ -173,19 +173,26 @@ public class FindCommandParser implements Parser<FindCommand> {
      * (n/, s/, r/) are used. Throws {@code ParseException} with a clear message otherwise.
      */
     private void validatePreamblePrefixCombination(ArgumentMultimap argMultimap) throws ParseException {
-        if (!hasPreamble(argMultimap)) {
-            return;
-        }
         List<String> unsupported = collectUnsupportedPrefixes(argMultimap);
 
-        if (!unsupported.isEmpty()) {
-            String joined = String.join(", ", unsupported);
+        if (unsupported.isEmpty()) {
+            return;
+        }
+
+        String joined = String.join(", ", unsupported);
+
+        if (hasPreamble(argMultimap)) {
             String message = PREAMBLE_RESTRICTED_MESSAGE + "\n"
                     + "Unsupported flags present: " + joined + ".\n"
                     + "Remove these flags or place the keywords after the prefixes.\n\n"
                     + FindCommand.MESSAGE_USAGE;
             throw new ParseException(message);
         }
+
+        String message = "Unsupported flags present: " + joined + ".\n"
+                + "The find command only supports these prefixes: n/, s/, r/, t/.\n\n"
+                + FindCommand.MESSAGE_USAGE;
+        throw new ParseException(message);
     }
 
     private List<String> collectUnsupportedPrefixes(ArgumentMultimap argMultimap) {

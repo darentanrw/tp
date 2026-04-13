@@ -699,6 +699,12 @@ Displays all tutor profiles stored in Tuto. The GUI features a left panel that d
 
 **Expected output:** The left panel automatically updates to show all stored tutors, and the result display shows `✨  Listed all tutors!`.
 
+<box type="info" seamless>
+
+**Note:** If your address book is completely empty, the `list` command will still display the exact same `✨  Listed all tutors!` success message. Since you have zero saved tutors, displaying an empty list technically means it has successfully listed all of them!
+
+</box>
+
 <box type="tip" seamless>
 
 **Tip:** Run this command to reset the view after a `find` command in CLI.

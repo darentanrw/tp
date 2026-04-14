@@ -134,11 +134,11 @@ Type a command into the **Command Box** at the bottom and press **Enter** to run
 
 Tuto's interface has three main areas:
 
-- **Tutor List Panel (Left)** — shows all Tutor Profiles saved
+- **Tutor Profile List (Left)** — shows all Tutor Profiles saved
 - **Result Display (Top Right)** — shows feedback after each command (success or error messages and records retrieved from searches)
 - **Command Box (Bottom Right)** — where you type your commands
 
-Each tutor card in the panel shows the tutor's name, phone number, email, subject, and hourly rate. Tags (if any) appear as labels on the card.
+Each tutor card in the panel shows the tutor's name, phone number, email, subject, and hourly rate. Address and tags (if any) appear as labels on the card.
 
 ---
 
